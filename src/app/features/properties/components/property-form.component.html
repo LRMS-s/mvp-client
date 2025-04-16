@@ -1,0 +1,386 @@
+            [ngClass]="{'is-invalid': propertyForm.get('description')?.touched && propertyForm.get('description')?.invalid}"
+          ></textarea>
+          <div class="invalid-feedback" *ngIf="propertyForm.get('description')?.touched && propertyForm.get('description')?.errors">
+            <span *ngIf="propertyForm.get('description')?.errors?.['required']">Description is required</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="propertyType">Property Type *</label>
+            <select
+              id="propertyType"
+              formControlName="propertyType"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('propertyType')?.touched && propertyForm.get('propertyType')?.invalid}"
+            >
+              <option *ngFor="let type of propertyTypes" [value]="type">
+                {{ type | titlecase }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="propertyForm.get('propertyType')?.touched && propertyForm.get('propertyType')?.errors">
+              <span *ngIf="propertyForm.get('propertyType')?.errors?.['required']">Property type is required</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="locationType">Location Type *</label>
+            <select
+              id="locationType"
+              formControlName="locationType"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('locationType')?.touched && propertyForm.get('locationType')?.invalid}"
+            >
+              <option *ngFor="let type of locationTypes" [value]="type">
+                {{ type.replace('_', ' ') | titlecase }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="propertyForm.get('locationType')?.touched && propertyForm.get('locationType')?.errors">
+              <span *ngIf="propertyForm.get('locationType')?.errors?.['required']">Location type is required</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Status *</label>
+            <select
+              id="status"
+              formControlName="status"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('status')?.touched && propertyForm.get('status')?.invalid}"
+            >
+              <option *ngFor="let status of statuses" [value]="status">
+                {{ status | titlecase }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="propertyForm.get('status')?.touched && propertyForm.get('status')?.errors">
+              <span *ngIf="propertyForm.get('status')?.errors?.['required']">Status is required</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Section -->
+      <div class="form-section">
+        <h2>Pricing</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="baseRate">Base Rate (per night) *</label>
+            <input
+              type="number"
+              id="baseRate"
+              formControlName="baseRate"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('baseRate')?.touched && propertyForm.get('baseRate')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('baseRate')?.touched && propertyForm.get('baseRate')?.errors">
+              <span *ngIf="propertyForm.get('baseRate')?.errors?.['required']">Base rate is required</span>
+              <span *ngIf="propertyForm.get('baseRate')?.errors?.['min']">Base rate must be a positive number</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="securityDeposit">Security Deposit</label>
+            <input
+              type="number"
+              id="securityDeposit"
+              formControlName="securityDeposit"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('securityDeposit')?.touched && propertyForm.get('securityDeposit')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('securityDeposit')?.touched && propertyForm.get('securityDeposit')?.errors">
+              <span *ngIf="propertyForm.get('securityDeposit')?.errors?.['min']">Security deposit must be a positive number</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Section -->
+      <div class="form-section">
+        <h2>Location & Address</h2>
+
+        <div class="form-group">
+          <label for="location">Location (Area/Region) *</label>
+          <input
+            type="text"
+            id="location"
+            formControlName="location"
+            class="form-control"
+            [ngClass]="{'is-invalid': propertyForm.get('location')?.touched && propertyForm.get('location')?.invalid}"
+          >
+          <div class="invalid-feedback" *ngIf="propertyForm.get('location')?.touched && propertyForm.get('location')?.errors">
+            <span *ngIf="propertyForm.get('location')?.errors?.['required']">Location is required</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="addressLine1">Address Line 1</label>
+          <input type="text" id="addressLine1" formControlName="addressLine1" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="addressLine2">Address Line 2</label>
+          <input type="text" id="addressLine2" formControlName="addressLine2" class="form-control">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" formControlName="city" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="state">State/Province</label>
+            <input type="text" id="state" formControlName="state" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" formControlName="country" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" id="postalCode" formControlName="postalCode" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="latitude">Latitude</label>
+            <input
+              type="number"
+              id="latitude"
+              formControlName="latitude"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('latitude')?.touched && propertyForm.get('latitude')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('latitude')?.touched && propertyForm.get('latitude')?.errors">
+              <span *ngIf="propertyForm.get('latitude')?.errors?.['min'] || propertyForm.get('latitude')?.errors?.['max']">Latitude must be between -90 and 90</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="longitude">Longitude</label>
+            <input
+              type="number"
+              id="longitude"
+              formControlName="longitude"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('longitude')?.touched && propertyForm.get('longitude')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('longitude')?.touched && propertyForm.get('longitude')?.errors">
+              <span *ngIf="propertyForm.get('longitude')?.errors?.['min'] || propertyForm.get('longitude')?.errors?.['max']">Longitude must be between -180 and 180</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images Section -->
+      <div class="form-section">
+        <h2>Images</h2>
+
+        <div class="form-group">
+          <label for="mainImageUrl">Main Image URL</label>
+          <input type="text" id="mainImageUrl" formControlName="mainImageUrl" class="form-control">
+          <small class="form-text text-muted">URL to the main image of the property</small>
+        </div>
+
+        <div class="form-group">
+          <label for="imageUrls">Additional Image URLs</label>
+          <textarea
+            id="imageUrls"
+            formControlName="imageUrls"
+            class="form-control"
+            rows="3"
+            placeholder="Enter URLs separated by commas"
+          ></textarea>
+          <small class="form-text text-muted">Enter multiple image URLs separated by commas</small>
+        </div>
+
+        <!-- File upload functionality would be added here in a real application -->
+      </div>
+
+      <!-- Property Details Section -->
+      <div class="form-section">
+        <h2>Property Details</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="maximumCapacity">Maximum Capacity *</label>
+            <input
+              type="number"
+              id="maximumCapacity"
+              formControlName="maximumCapacity"
+              class="form-control"
+              min="1"
+              [ngClass]="{'is-invalid': propertyForm.get('maximumCapacity')?.touched && propertyForm.get('maximumCapacity')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('maximumCapacity')?.touched && propertyForm.get('maximumCapacity')?.errors">
+              <span *ngIf="propertyForm.get('maximumCapacity')?.errors?.['required']">Maximum capacity is required</span>
+              <span *ngIf="propertyForm.get('maximumCapacity')?.errors?.['min']">Maximum capacity must be at least 1</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="totalArea">Total Area (m²) *</label>
+            <input
+              type="number"
+              id="totalArea"
+              formControlName="totalArea"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('totalArea')?.touched && propertyForm.get('totalArea')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('totalArea')?.touched && propertyForm.get('totalArea')?.errors">
+              <span *ngIf="propertyForm.get('totalArea')?.errors?.['required']">Total area is required</span>
+              <span *ngIf="propertyForm.get('totalArea')?.errors?.['min']">Total area must be a positive number</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="numberOfBedrooms">Number of Bedrooms *</label>
+            <input
+              type="number"
+              id="numberOfBedrooms"
+              formControlName="numberOfBedrooms"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('numberOfBedrooms')?.touched && propertyForm.get('numberOfBedrooms')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('numberOfBedrooms')?.touched && propertyForm.get('numberOfBedrooms')?.errors">
+              <span *ngIf="propertyForm.get('numberOfBedrooms')?.errors?.['required']">Number of bedrooms is required</span>
+              <span *ngIf="propertyForm.get('numberOfBedrooms')?.errors?.['min']">Number of bedrooms must be a non-negative number</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="numberOfBathrooms">Number of Bathrooms *</label>
+            <input
+              type="number"
+              id="numberOfBathrooms"
+              formControlName="numberOfBathrooms"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('numberOfBathrooms')?.touched && propertyForm.get('numberOfBathrooms')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('numberOfBathrooms')?.touched && propertyForm.get('numberOfBathrooms')?.errors">
+              <span *ngIf="propertyForm.get('numberOfBathrooms')?.errors?.['required']">Number of bathrooms is required</span>
+              <span *ngIf="propertyForm.get('numberOfBathrooms')?.errors?.['min']">Number of bathrooms must be a non-negative number</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="numberOfFloors">Number of Floors</label>
+            <input
+              type="number"
+              id="numberOfFloors"
+              formControlName="numberOfFloors"
+              class="form-control"
+              min="1"
+              [ngClass]="{'is-invalid': propertyForm.get('numberOfFloors')?.touched && propertyForm.get('numberOfFloors')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('numberOfFloors')?.touched && propertyForm.get('numberOfFloors')?.errors">
+              <span *ngIf="propertyForm.get('numberOfFloors')?.errors?.['min']">Number of floors must be at least 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="constructionYear">Construction Year</label>
+            <input
+              type="number"
+              id="constructionYear"
+              formControlName="constructionYear"
+              class="form-control"
+              [ngClass]="{'is-invalid': propertyForm.get('constructionYear')?.touched && propertyForm.get('constructionYear')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('constructionYear')?.touched && propertyForm.get('constructionYear')?.errors">
+              <span *ngIf="propertyForm.get('constructionYear')?.errors?.['min'] || propertyForm.get('constructionYear')?.errors?.['max']">
+                Construction year must be between 1800 and {{ new Date().getFullYear() }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="parkingCapacity">Parking Capacity</label>
+            <input
+              type="number"
+              id="parkingCapacity"
+              formControlName="parkingCapacity"
+              class="form-control"
+              min="0"
+              [ngClass]="{'is-invalid': propertyForm.get('parkingCapacity')?.touched && propertyForm.get('parkingCapacity')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="propertyForm.get('parkingCapacity')?.touched && propertyForm.get('parkingCapacity')?.errors">
+              <span *ngIf="propertyForm.get('parkingCapacity')?.errors?.['min']">Parking capacity must be a non-negative number</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="kitchenSpecifications">Kitchen Specifications</label>
+          <textarea id="kitchenSpecifications" formControlName="kitchenSpecifications" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="viewType">View Type</label>
+          <input type="text" id="viewType" formControlName="viewType" class="form-control">
+          <small class="form-text text-muted">E.g., Ocean view, Mountain view, City view, etc.</small>
+        </div>
+      </div>
+
+      <!-- Amenities Section -->
+      <div class="form-section">
+        <h2>Amenities & Features</h2>
+
+        <div class="checkbox-group">
+          <div class="form-check">
+            <input type="checkbox" id="hasPool" formControlName="hasPool" class="form-check-input">
+            <label for="hasPool" class="form-check-label">Swimming Pool</label>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="hasGarden" formControlName="hasGarden" class="form-check-input">
+            <label for="hasGarden" class="form-check-label">Garden</label>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="hasSpa" formControlName="hasSpa" class="form-check-input">
+            <label for="hasSpa" class="form-check-label">Spa</label>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="hasGym" formControlName="hasGym" class="form-check-input">
+            <label for="hasGym" class="form-check-label">Gym</label>
+          </div>
+        </div>
+
+        <!-- Additional amenities would be added here in a real application -->
+      </div>
+
+      <!-- Additional Information Section -->
+      <div class="form-section">
+        <h2>Additional Information</h2>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" formControlName="notes" class="form-control" rows="3"></textarea>
+          <small class="form-text text-muted">Any additional information about the property</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="submitting">
+        {{ submitting ? 'Saving...' : (isEditMode ? 'Update Property' : 'Add Property') }}
+      </button>
+      <a routerLink="/properties" class="btn-link">Cancel</a>
+    </div>
+  </form>
+</div>

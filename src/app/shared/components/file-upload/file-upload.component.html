@@ -1,0 +1,73 @@
+<div class="file-upload">
+  <input
+    #fileInput
+    type="file"
+    class="file-input"
+    [multiple]="multiple"
+    [accept]="accept"
+    (change)="onFileSelected($event)"
+  >
+
+  <div
+    class="upload-area"
+    [class.is-dragging]="isDragging"
+    [class.has-files]="selectedFiles.length > 0"
+    [class.drag-drop]="dragDrop"
+    (click)="triggerFileInput()"
+    (dragover)="dragDrop && onDragOver($event)"
+    (dragleave)="dragDrop && onDragLeave($event)"
+    (drop)="dragDrop && onDrop($event)"
+  >
+    <div class="upload-icon"></div>
+
+    <div class="upload-content">
+      <div class="upload-label">{{ label }}</div>
+
+      <div class="upload-info" *ngIf="selectedFiles.length === 0">
+        {{ placeholder }}
+      </div>
+
+      <div class="upload-info" *ngIf="selectedFiles.length > 0">
+        {{ selectedFiles.length }} {{ selectedFiles.length === 1 ? 'file' : 'files' }} selected
+      </div>
+
+      <div class="drag-instruction" *ngIf="dragDrop">
+        or drag and drop here
+      </div>
+    </div>
+  </div>
+
+  <div class="file-list" *ngIf="selectedFiles.length > 0">
+    <div class="file-list-header">
+      <div class="file-count">
+        {{ selectedFiles.length }} {{ selectedFiles.length === 1 ? 'file' : 'files' }} selected
+      </div>
+
+      <button class="clear-all-btn" (click)="clearFiles()">
+        Clear all
+      </button>
+    </div>
+
+    <div class="file-items">
+      <div
+        *ngFor="let file of selectedFiles; let i = index"
+        class="file-item"
+      >
+        <div class="file-preview" *ngIf="showPreview && i < previews.length">
+          <img [src]="previews[i]" alt="Preview">
+        </div>
+
+        <div class="file-icon" *ngIf="!showPreview || i >= previews.length"></div>
+
+        <div class="file-info">
+          <div class="file-name">{{ file.name }}</div>
+          <div class="file-size">{{ file.size | number }} bytes</div>
+        </div>
+
+        <button class="remove-file-btn" (click)="removeFile(i)">
+          &times;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

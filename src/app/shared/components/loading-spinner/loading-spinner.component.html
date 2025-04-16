@@ -1,0 +1,17 @@
+<div
+  class="spinner-container"
+  [class.fullscreen]="fullscreen"
+  [class.overlay]="overlay"
+>
+  <div class="spinner-wrapper">
+    <div
+      class="spinner"
+      [ngClass]="'spinner-' + size"
+      [style.border-top-color]="color"
+    ></div>
+
+    <div class="spinner-text" *ngIf="text">
+      {{ text }}
+    </div>
+  </div>
+</div>

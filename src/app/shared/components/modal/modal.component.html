@@ -1,0 +1,31 @@
+<div
+  class="modal-backdrop"
+  [class.show]="visible"
+  (click)="onBackdropClick($event)"
+>
+  <div class="modal-dialog" [ngClass]="'modal-' + size">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button
+          *ngIf="closable"
+          class="modal-close"
+          (click)="close()"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <ng-container *ngIf="contentTemplate">
+          <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+        </ng-container>
+      </div>
+
+      <div class="modal-footer" *ngIf="footerTemplate">
+        <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>

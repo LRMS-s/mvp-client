@@ -1,0 +1,20 @@
+<div class="search-bar">
+  <div class="search-icon"></div>
+
+  <input
+    type="text"
+    class="search-input"
+    [placeholder]="placeholder"
+    [(ngModel)]="value"
+    (input)="onInput($event)"
+  >
+
+  <button
+    *ngIf="value"
+    class="clear-button"
+    (click)="onClear()"
+    aria-label="Clear search"
+  >
+    &times;
+  </button>
+</div>

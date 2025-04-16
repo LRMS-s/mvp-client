@@ -1,0 +1,91 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <button class="collapse-btn">
+      <i class="icon menu-icon"></i>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="section-title">Management</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+            <i class="icon dashboard-icon"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/properties" routerLinkActive="active"
+            class="nav-link">
+            <i class="icon property-icon"></i>
+            <span>Properties</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/vehicles" routerLinkActive="active" class="nav-link">
+            <i class="icon vehicle-icon"></i>
+            <span>Vehicles</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/reservations" routerLinkActive="active"
+            class="nav-link">
+            <i class="icon reservation-icon"></i>
+            <span>Reservations</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-section" *ngIf="isAdmin || isStaff">
+      <div class="section-title">People</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/clients" routerLinkActive="active" class="nav-link">
+            <i class="icon client-icon"></i>
+            <span>Clients</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/staff" routerLinkActive="active" class="nav-link">
+            <i class="icon staff-icon"></i>
+            <span>Staff</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="section-title">Account</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/settings/profile" routerLinkActive="active"
+            class="nav-link">
+            <i class="icon profile-icon"></i>
+            <span>My Profile</span>
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAdmin">
+          <a routerLink="/settings" routerLinkActive="active" class="nav-link">
+            <i class="icon settings-icon"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a (click)="authService.logout()" class="nav-link">
+            <i class="icon logout-icon"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</aside>

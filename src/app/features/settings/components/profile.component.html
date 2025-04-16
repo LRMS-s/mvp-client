@@ -1,0 +1,367 @@
+
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">My Profile</h1>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+    <p class="mt-3 text-gray-600">Loading your profile...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!isLoading && generalError" class="bg-red-50 border-l-4 border-red-400 p-4 my-6">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-700">{{ generalError }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success message -->
+  <div *ngIf="!isLoading && successMessage" class="bg-green-50 border-l-4 border-green-400 p-4 my-6">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-green-700">{{ successMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile content -->
+  <div *ngIf="!isLoading && !generalError && currentUser" class="space-y-6">
+    <!-- Basic Information -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-4 py-5 sm:px-6 bg-gray-50">
+        <h2 class="text-lg font-medium text-gray-900">Basic Information</h2>
+        <p class="mt-1 text-sm text-gray-500">Update your personal information</p>
+      </div>
+
+      <div class="px-4 py-5 sm:p-6">
+        <form [formGroup]="userForm" >
+          <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div class="sm:col-span-3">
+              <label for="firstName" class="block text-sm font-medium text-gray-700">First Name *</label>
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}"
+              >
+              <p *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="mt-2 text-sm text-red-600">
+                {{ getFieldError(userForm, 'firstName') }}
+              </p>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name *</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}"
+              >
+              <p *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="mt-2 text-sm text-red-600">
+                {{ getFieldError(userForm, 'lastName') }}
+              </p>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                [disabled]="true"
+              >
+              <p class="mt-1 text-sm text-gray-500">Email cannot be changed</p>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                formControlName="phone"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-6">
+              <label for="address" class="block text-sm font-medium text-gray-700">Street Address</label>
+              <input
+                type="text"
+                id="address"
+                formControlName="address"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+              <input
+                type="text"
+                id="city"
+                formControlName="city"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
+              <input
+                type="text"
+                id="state"
+                formControlName="state"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="postalCode" class="block text-sm font-medium text-gray-700">ZIP / Postal Code</label>
+              <input
+                type="text"
+                id="postalCode"
+                formControlName="postalCode"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+              <input
+                type="text"
+                id="country"
+                formControlName="country"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button
+              type="submit"
+              [disabled]="userForm.invalid || isSaving"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ isSaving ? 'Saving...' : 'Update Profile' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Role-Specific Information -->
+    <div *ngIf="isClient || isStaff || isAdmin" class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-4 py-5 sm:px-6 bg-gray-50">
+        <h2 class="text-lg font-medium text-gray-900">
+          {{ isClient ? 'Client Information' : 'Staff Information' }}
+        </h2>
+        <p class="mt-1 text-sm text-gray-500">
+          {{ isClient ? 'Manage your client-specific details' : 'Manage your staff-specific details' }}
+        </p>
+      </div>
+
+      <div class="px-4 py-5 sm:p-6">
+        <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+          <!-- Client-specific fields -->
+          <div *ngIf="isClient" class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div class="sm:col-span-3">
+              <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
+              <input
+                type="text"
+                id="companyName"
+                formControlName="companyName"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="taxId" class="block text-sm font-medium text-gray-700">Tax ID</label>
+              <input
+                type="text"
+                id="taxId"
+                formControlName="taxId"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="nationality" class="block text-sm font-medium text-gray-700">Nationality</label>
+              <input
+                type="text"
+                id="nationality"
+                formControlName="nationality"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="clientSource" class="block text-sm font-medium text-gray-700">Client Source</label>
+              <select
+                id="clientSource"
+                formControlName="clientSource"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+                <option value="">Select a source</option>
+                <option value="Website">Website</option>
+                <option value="Referral">Referral</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Advertisement">Advertisement</option>
+                <option value="Partner">Partner</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-6">
+              <label for="clientNotes" class="block text-sm font-medium text-gray-700">Notes</label>
+              <textarea
+                id="clientNotes"
+                formControlName="clientNotes"
+                rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Staff-specific fields -->
+          <div *ngIf="isStaff || isAdmin" class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div class="sm:col-span-6">
+              <label for="emergencyContact" class="block text-sm font-medium text-gray-700">Emergency Contact</label>
+              <input
+                type="text"
+                id="emergencyContact"
+                formControlName="emergencyContact"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+              <p class="mt-1 text-sm text-gray-500">Name and phone number of emergency contact</p>
+            </div>
+
+            <div class="sm:col-span-6">
+              <label for="qualification" class="block text-sm font-medium text-gray-700">Qualifications</label>
+              <textarea
+                id="qualification"
+                formControlName="qualification"
+                rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              ></textarea>
+              <p class="mt-1 text-sm text-gray-500">List your relevant qualifications, certifications, or skills</p>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button
+              type="submit"
+              [disabled]="profileForm.invalid || isSaving"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ isSaving ? 'Saving...' : 'Update Information' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-4 py-5 sm:px-6 bg-gray-50">
+        <h2 class="text-lg font-medium text-gray-900">Change Password</h2>
+        <p class="mt-1 text-sm text-gray-500">Update your account password</p>
+      </div>
+
+      <div class="px-4 py-5 sm:p-6">
+        <!-- Password error message -->
+        <div *ngIf="passwordError" class="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">{{ passwordError }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password success message -->
+        <div *ngIf="passwordSuccessMessage" class="mb-4 bg-green-50 border-l-4 border-green-400 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-green-700">{{ passwordSuccessMessage }}</p>
+            </div>
+          </div>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+          <div class="space-y-4">
+            <div>
+              <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password *</label>
+              <input
+                type="password"
+                id="currentPassword"
+                formControlName="currentPassword"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+              <div *ngIf="passwordForm?.get('currentPassword')?.errors" class="mt-1 text-xs text-red-600">
+              </div>
+            </div>
+
+            <div>
+              <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password *</label>
+              <input
+                type="password"
+                id="newPassword"
+                formControlName="newPassword"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+              <div *ngIf="passwordForm?.get('newPassword')?.errors" class="mt-1 text-xs text-red-600">
+              </div>
+            </div>
+
+            <div>
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password *</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+              <div *ngIf="passwordForm?.get('confirmPassword')?.errors" class="mt-1 text-xs text-red-600">
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                [disabled]="passwordForm.invalid">Submit </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

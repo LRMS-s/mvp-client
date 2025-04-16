@@ -1,0 +1,289 @@
+
+// src/app/features/clients/components/client-form.component.html
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <div class="flex items-center">
+      <a routerLink="/clients" class="text-gray-500 hover:text-gray-700 mr-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clip-rule="evenodd" />
+        </svg>
+      </a>
+      <h1 class="text-2xl font-bold text-gray-800">{{ isEditMode ? 'Edit Client'
+        : 'Add New Client' }}</h1>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+    <p class="mt-3 text-gray-600">Loading client data...</p>
+  </div>
+
+  <!-- Error alert -->
+  <div *ngIf="error" class="mb-6 bg-red-50 border-l-4 border-red-400 p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+            clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-700">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client form -->
+  <div *ngIf="!isLoading" class="bg-white shadow-sm rounded-lg">
+    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Basic
+          Information</h2>
+
+        <div formGroupName="user"
+          class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+          <div>
+            <label for="firstName"
+              class="block text-sm font-medium text-gray-700">First Name
+              *</label>
+            <input
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}">
+            <p
+              *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+              class="mt-2 text-sm text-red-600">
+              {{ getFieldError(userForm, 'firstName') }}
+            </p>
+          </div>
+
+          <div>
+            <label for="lastName"
+              class="block text-sm font-medium text-gray-700">Last Name
+              *</label>
+            <input
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}">
+            <p
+              *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+              class="mt-2 text-sm text-red-600">
+              {{ getFieldError(userForm, 'lastName') }}
+            </p>
+          </div>
+
+          <div>
+            <label for="email"
+              class="block text-sm font-medium text-gray-700">Email Address
+              *</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+              [attr.disabled]="isEditMode ? true : null">
+            <p
+              *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+              class="mt-2 text-sm text-red-600">
+              {{ getFieldError(userForm, 'email') }}
+            </p>
+          </div>
+
+          <div>
+            <label for="phone"
+              class="block text-sm font-medium text-gray-700">Phone
+              Number</label>
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div *ngIf="!isEditMode" class="sm:col-span-2">
+            <label for="password"
+              class="block text-sm font-medium text-gray-700">Password *</label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
+            <p
+              *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+              class="mt-2 text-sm text-red-600">
+              {{ getFieldError(userForm, 'password') }}
+            </p>
+            <p class="mt-1 text-sm text-gray-500">
+              Password must be at least 8 characters long.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Company
+          Information</h2>
+
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+          <div>
+            <label for="companyName"
+              class="block text-sm font-medium text-gray-700">Company
+              Name</label>
+            <input
+              type="text"
+              id="companyName"
+              formControlName="companyName"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <p class="mt-1 text-sm text-gray-500">Leave blank for individual
+              clients</p>
+          </div>
+
+          <div>
+            <label for="taxId"
+              class="block text-sm font-medium text-gray-700">Tax ID</label>
+            <input
+              type="text"
+              id="taxId"
+              formControlName="taxId"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div>
+            <label for="nationality"
+              class="block text-sm font-medium text-gray-700">Nationality</label>
+            <input
+              type="text"
+              id="nationality"
+              formControlName="nationality"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div>
+            <label for="clientSource"
+              class="block text-sm font-medium text-gray-700">Client
+              Source</label>
+            <select
+              id="clientSource"
+              formControlName="clientSource"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+              <option value>Select a source</option>
+              <option value="Website">Website</option>
+              <option value="Referral">Referral</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Advertisement">Advertisement</option>
+              <option value="Partner">Partner</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-b border-gray-200" formGroupName="user">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Address
+          Information</h2>
+
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <div class="sm:col-span-6">
+            <label for="address"
+              class="block text-sm font-medium text-gray-700">Street
+              Address</label>
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="city"
+              class="block text-sm font-medium text-gray-700">City</label>
+            <input
+              type="text"
+              id="city"
+              formControlName="city"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="state"
+              class="block text-sm font-medium text-gray-700">State /
+              Province</label>
+            <input
+              type="text"
+              id="state"
+              formControlName="state"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="postalCode"
+              class="block text-sm font-medium text-gray-700">ZIP / Postal
+              Code</label>
+            <input
+              type="text"
+              id="postalCode"
+              formControlName="postalCode"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="country"
+              class="block text-sm font-medium text-gray-700">Country</label>
+            <input
+              type="text"
+              id="country"
+              formControlName="country"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Additional
+          Information</h2>
+
+        <div>
+          <label for="notes"
+            class="block text-sm font-medium text-gray-700">Notes</label>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            rows="4"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+          <p class="mt-1 text-sm text-gray-500">
+            Add any additional information about this client.
+          </p>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 bg-gray-50 flex justify-between items-center">
+        <button
+          type="button"
+          routerLink="/clients"
+          class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="clientForm.invalid || isSaving"
+          class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isSaving ? 'Saving...' : (isEditMode ? 'Update Client' :
+          'Create Client') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

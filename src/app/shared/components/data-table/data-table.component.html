@@ -1,0 +1,107 @@
+<div class="data-table-wrapper">
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th *ngIf="selectable" class="select-column">
+            <input
+              type="checkbox"
+              [checked]="allSelected"
+              (change)="onSelectAll($event)"
+            >
+          </th>
+          <th
+            *ngFor="let column of columns"
+            [class.sortable]="column.sortable && sortable"
+            [class.sorted]="sortColumn === column.key"
+            [class.asc]="sortColumn === column.key && sortDirection === 'asc'"
+            [class.desc]="sortColumn === column.key && sortDirection === 'desc'"
+            (click)="onSort(column)"
+          >
+            {{ column.label }}
+            <span class="sort-icon" *ngIf="column.sortable && sortable"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading">
+          <td [attr.colspan]="selectable ? columns.length + 1 : columns.length" class="loading-cell">
+            <div class="loading-indicator">Loading...</div>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && (!data || data.length === 0)">
+          <td [attr.colspan]="selectable ? columns.length + 1 : columns.length" class="empty-cell">
+            {{ emptyMessage }}
+          </td>
+        </tr>
+
+        <tr
+          *ngFor="let item of data"
+          [class.selected]="isSelected(item)"
+          (click)="onRowClick(item)"
+        >
+          <td *ngIf="selectable" class="select-column" (click)="$event.stopPropagation()">
+            <input
+              type="checkbox"
+              [checked]="isSelected(item)"
+              (change)="onSelectItem($event, item)"
+            >
+          </td>
+          <td *ngFor="let column of columns">
+            {{ getFormattedValue(item, column) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="pagination && totalItems > 0">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} items
+    </div>
+
+    <div class="pagination-controls">
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(1)"
+      >
+        &laquo;
+      </button>
+
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+      >
+        &lsaquo;
+      </button>
+
+      <button
+        *ngFor="let page of pages"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        (click)="onPageChange(page)"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+      >
+        &rsaquo;
+      </button>
+
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(totalPages)"
+      >
+        &raquo;
+      </button>
+    </div>
+  </div>
+</div>

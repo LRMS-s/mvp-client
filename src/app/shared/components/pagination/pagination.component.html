@@ -1,0 +1,48 @@
+<div class="pagination-container">
+  <div class="pagination-info" *ngIf="showInfo && totalItems > 0">
+    Showing {{ startItem }} to {{ endItem }} of {{ totalItems }} items
+  </div>
+
+  <div class="pagination-controls">
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(1)"
+    >
+      &laquo;
+    </button>
+
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+    >
+      &lsaquo;
+    </button>
+
+    <button
+      *ngFor="let page of pages"
+      class="pagination-btn"
+      [class.active]="page === currentPage"
+      (click)="onPageChange(page)"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
+    >
+      &rsaquo;
+    </button>
+
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(totalPages)"
+    >
+      &raquo;
+    </button>
+  </div>
+</div>
