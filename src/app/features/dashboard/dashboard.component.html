@@ -1,0 +1,133 @@
+<div class="dashboard-container">
+  <h1 class="dashboard-title">Dashboard</h1>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <p>Error loading dashboard data. Please try again later.</p>
+    <button (click)="loadDashboardData()">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="dashboard-content">
+    <!-- Overview Cards -->
+    <div class="stats-cards">
+      <div class="card">
+        <h3>Properties</h3>
+        <div class="card-value">{{ stats.propertyStats?.totalProperties || 0 }}</div>
+        <div class="card-detail">
+          Available: {{ stats.propertyStats?.availableProperties || 0 }}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Vehicles</h3>
+        <div class="card-value">{{ stats.vehicleStats?.totalVehicles || 0 }}</div>
+        <div class="card-detail">
+          Available: {{ stats.vehicleStats?.availableVehicles || 0 }}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Reservations</h3>
+        <div class="card-value">{{ stats.reservationStats?.totalReservations || 0 }}</div>
+        <div class="card-detail">
+          Active: {{ stats.reservationStats?.activeReservations || 0 }}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Clients</h3>
+        <div class="card-value">{{ stats.clientStats?.totalClients || 0 }}</div>
+        <div class="card-detail">
+          New This Month: {{ stats.clientStats?.newClientsThisMonth || 0 }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Reservations Section -->
+    <div class="section">
+      <h2>Recent Reservations</h2>
+      <div class="table-container">
+        <table *ngIf="stats.recentReservations?.length; else noReservations">
+          <thead>
+            <tr>
+              <th>Reservation #</th>
+              <th>Client</th>
+              <th>Item</th>
+              <th>Dates</th>
+              <th>Status</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of stats.recentReservations">
+              <td>{{ reservation.reservationNumber }}</td>
+              <td>{{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}</td>
+              <td>
+                {{ reservation.itemType === 'property' ? reservation.property?.name : reservation.vehicle?.name }}
+              </td>
+              <td>{{ reservation.startDate | date:'MMM d' }} - {{ reservation.endDate | date:'MMM d, y' }}</td>
+              <td>
+                <span class="status-badge status-{{ reservation.status }}">
+                  {{ reservation.status }}
+                </span>
+              </td>
+              <td>{{ reservation.totalAmount | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noReservations>
+          <p class="no-data">No recent reservations found.</p>
+        </ng-template>
+      </div>
+      <div class="view-all">
+        <a routerLink="/reservations">View All Reservations</a>
+      </div>
+    </div>
+
+    <!-- Upcoming Maintenance Section -->
+    <div class="section">
+      <h2>Upcoming Maintenance</h2>
+      <div class="table-container">
+        <table *ngIf="stats.upcomingMaintenance?.length; else noMaintenance">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let maintenance of stats.upcomingMaintenance">
+              <td>{{ maintenance.itemName }}</td>
+              <td>{{ maintenance.itemType }}</td>
+              <td>{{ maintenance.scheduledDate | date:'MMM d, y' }}</td>
+              <td>
+                <span class="status-badge status-{{ maintenance.status }}">
+                  {{ maintenance.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noMaintenance>
+          <p class="no-data">No upcoming maintenance scheduled.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+      <h2>Quick Actions</h2>
+      <div class="links-container">
+        <a routerLink="/reservations/new" class="quick-link">New Reservation</a>
+        <a routerLink="/clients/new" class="quick-link">New Client</a>
+        <a routerLink="/properties/new" class="quick-link">Add Property</a>
+        <a routerLink="/vehicles/new" class="quick-link">Add Vehicle</a>
+      </div>
+    </div>
+  </div>
+</div>

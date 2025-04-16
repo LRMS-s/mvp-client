@@ -1,0 +1,121 @@
+<div class="properties-container">
+  <header class="page-header">
+    <h1>Properties</h1>
+    <a routerLink="/properties/new" class="btn-primary">Add New Property</a>
+  </header>
+
+  <div class="filters-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="search-field">
+        <input
+          type="text"
+          formControlName="searchTerm"
+          placeholder="Search properties..."
+          class="form-control"
+        >
+      </div>
+
+      <div class="filter-fields">
+        <div class="filter-field">
+          <label for="propertyType">Type</label>
+          <select id="propertyType" formControlName="propertyType" class="form-control">
+            <option value="">All Types</option>
+            <option *ngFor="let type of propertyTypes" [value]="type">
+              {{ type | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="locationType">Location</label>
+          <select id="locationType" formControlName="locationType" class="form-control">
+            <option value="">All Locations</option>
+            <option *ngFor="let type of locationTypes" [value]="type">
+              {{ type.replace('_', ' ') | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status" class="form-control">
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of propertyStatuses" [value]="status">
+              {{ status | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="minBedrooms">Min Bedrooms</label>
+          <input
+            type="number"
+            id="minBedrooms"
+            formControlName="minBedrooms"
+            min="0"
+            class="form-control"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="maxPrice">Max Price</label>
+          <input
+            type="number"
+            id="maxPrice"
+            formControlName="maxPrice"
+            min="0"
+            class="form-control"
+          >
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="resetFilters()">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading properties...</p>
+  </div>
+
+  <div *ngIf="!loading && filteredProperties.length === 0" class="empty-state">
+    <p>No properties found matching your criteria.</p>
+  </div>
+
+  <div *ngIf="!loading && filteredProperties.length > 0" class="property-grid">
+    <div *ngFor="let property of filteredProperties" class="property-card">
+      <div class="property-img">
+        <img [src]="property.mainImageUrl || '/assets/images/property-placeholder.jpg'" [alt]="property.name">
+        <div class="property-badge" [ngClass]="'status-' + property.status">
+          {{ property.status }}
+        </div>
+      </div>
+
+      <div class="property-content">
+        <h2 class="property-title">{{ property.name }}</h2>
+        <p class="property-location">{{ property.location }}</p>
+
+        <div class="property-features">
+          <span class="feature">
+            <i class="feature-icon beds-icon"></i>
+            {{ property.numberOfBedrooms }} Bedrooms
+          </span>
+          <span class="feature">
+            <i class="feature-icon baths-icon"></i>
+            {{ property.numberOfBathrooms }} Bathrooms
+          </span>
+          <span class="feature">
+            <i class="feature-icon area-icon"></i>
+            {{ property.totalArea }} m²
+          </span>
+        </div>
+
+        <div class="property-footer">
+          <div class="property-price">
+            {{ property.baseRate | currency }} / night
+          </div>
+          <a [routerLink]="['/properties', property.id]" class="btn-view">View Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
