@@ -1,0 +1,120 @@
+.calendar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.calendar-view {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-header-row {
+  display: contents;
+}
+
+.calendar-header-cell {
+  text-align: center;
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  border-right: 1px solid #e5e7eb;
+}
+
+.calendar-header-cell:last-child {
+  border-right: none;
+}
+
+.calendar-cell {
+  min-height: 100px;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  position: relative;
+  background-color: white;
+}
+
+.calendar-cell.other-month {
+  background-color: #f9fafb;
+  color: #9ca3af;
+}
+
+.reservation-marker {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reservation-marker.property {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #1e40af;
+}
+
+.reservation-marker.vehicle {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #047857;
+}
+
+.reservation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+@media (max-width: 768px) {
+  .calendar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .calendar-header-cell:nth-child(n+4) {
+    display: none;
+  }
+
+  .calendar-cell {
+    min-height: 80px;
+  }
+}

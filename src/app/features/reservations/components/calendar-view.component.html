@@ -1,0 +1,90 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div class="calendar-navigation">
+      <button (click)="goToPreviousMonth()" class="nav-button">
+        &lt; Previous
+      </button>
+      <h2>{{ currentMonth | date:'MMMM yyyy' }}</h2>
+      <button (click)="goToNextMonth()" class="nav-button">
+        Next &gt;
+      </button>
+    </div>
+    <div class="view-toggle">
+      <button
+        (click)="switchView('month')"
+        [class.active]="currentView === 'month'"
+      >
+        Month
+      </button>
+      <button
+        (click)="switchView('week')"
+        [class.active]="currentView === 'week'"
+      >
+        Week
+      </button>
+      <button
+        (click)="switchView('day')"
+        [class.active]="currentView === 'day'"
+      >
+        Day
+      </button>
+    </div>
+  </div>
+
+  <div class="calendar-view">
+    <div class="calendar-grid">
+      <!-- Weekday headers -->
+      <div class="calendar-header-row">
+        <div
+          *ngFor="let day of weekdays"
+          class="calendar-header-cell"
+        >
+          {{ day }}
+        </div>
+      </div>
+
+      <!-- Calendar cells -->
+      <div
+        *ngFor="let day of calendarDays"
+        class="calendar-cell"
+        [class.other-month]="day.isOtherMonth"
+      >
+        <div class="day-number">{{ day.date.getDate() }}</div>
+
+        <!-- Reservations for this day -->
+        <div
+          *ngFor="let reservation of day.reservations"
+          class="reservation-marker"
+          [class.property]="reservation.itemType === 'property'"
+          [class.vehicle]="reservation.itemType === 'vehicle'"
+          (click)="openReservationDetails(reservation)"
+        >
+          {{ reservation.reservationNumber }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reservation Details Modal -->
+  <div
+    *ngIf="selectedReservation"
+    class="modal-overlay"
+    (click)="closeReservationDetails()"
+  >
+    <div
+      class="reservation-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <h3>Reservation Details</h3>
+      <div *ngIf="selectedReservation">
+        <p>Number: {{ selectedReservation.reservationNumber }}</p>
+        <p>Item: {{ selectedReservation.itemType }}</p>
+        <p>Start Date: {{ selectedReservation.startDate | date }}</p>
+        <p>End Date: {{ selectedReservation.endDate | date }}</p>
+        <button (click)="viewFullReservationDetails()">
+          View Full Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

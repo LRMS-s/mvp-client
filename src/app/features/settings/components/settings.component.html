@@ -1,0 +1,120 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>System Settings</h1>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading system settings...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <p>{{ error }}</p>
+    <button (click)="loadSettings()">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="settings-content">
+    <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+      <div class="settings-section">
+        <h2>General Settings</h2>
+
+        <div class="form-group">
+          <label for="companyName">Company Name</label>
+          <input
+            type="text"
+            id="companyName"
+            formControlName="companyName"
+            class="form-control"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="supportEmail">Support Email</label>
+          <input
+            type="email"
+            id="supportEmail"
+            formControlName="supportEmail"
+            class="form-control"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Support Phone Number</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            class="form-control"
+          >
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2>System Preferences</h2>
+
+        <div class="form-group">
+          <label>
+            <input
+              type="checkbox"
+              formControlName="enableNotifications"
+            >
+            Enable System Notifications
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Language</label>
+          <select
+            formControlName="language"
+            class="form-control"
+          >
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2>Security Settings</h2>
+
+        <div class="form-group">
+          <label>
+            <input
+              type="checkbox"
+              formControlName="requireTwoFactor"
+            >
+            Require Two-Factor Authentication
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Session Timeout (minutes)</label>
+          <input
+            type="number"
+            formControlName="sessionTimeout"
+            class="form-control"
+            min="5"
+            max="1440"
+          >
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="resetForm()"
+        >
+          Reset to Defaults
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="settingsForm.invalid || isSaving"
+        >
+          {{ isSaving ? 'Saving...' : 'Save Settings' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

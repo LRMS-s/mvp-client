@@ -1,0 +1,142 @@
+<div class="reservation-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading reservation details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <p>Error loading reservation details. The reservation might not exist or has been removed.</p>
+    <button routerLink="/reservations" class="btn-primary">Back to Reservations</button>
+  </div>
+
+  <!-- Reservation Details -->
+  <div *ngIf="!loading && !error && reservation" class="reservation-detail">
+    <div class="reservation-header">
+      <div class="header-content">
+        <h1>Reservation #{{ reservation.reservationNumber }}</h1>
+        <div class="status-badge" [ngClass]="'status-' + reservation.status">
+          {{ reservation.status | titlecase }}
+        </div>
+      </div>
+
+      <div class="header-actions" *ngIf="isAdmin || isStaff">
+        <button
+          *ngIf="reservation.status === 'pending'"
+          (click)="checkInReservation()"
+          class="btn-action btn-check-in"
+        >
+          Check In
+        </button>
+        <button
+          *ngIf="reservation.status === 'checked_in'"
+          (click)="checkOutReservation()"
+          class="btn-action btn-check-out"
+        >
+          Check Out
+        </button>
+        <button
+          *ngIf="reservation.status !== 'cancelled'"
+          (click)="cancelReservation()"
+          class="btn-action btn-cancel"
+        >
+          Cancel Reservation
+        </button>
+      </div>
+    </div>
+
+    <div class="reservation-body">
+      <div class="reservation-main">
+        <div class="reservation-section">
+          <h2>Rental Item</h2>
+          <div *ngIf="reservation.itemType === 'property'" class="item-details">
+            <h3>{{ reservation.property?.name }}</h3>
+            <p>{{ reservation.property?.location }}</p>
+            <a [routerLink]="['/properties', reservation.property?.id]">View Property Details</a>
+          </div>
+          <div *ngIf="reservation.itemType === 'vehicle'" class="item-details">
+            <h3>{{ reservation.vehicle?.name }}</h3>
+            <p>{{ reservation.vehicle?.make }} {{ reservation.vehicle?.model }}</p>
+            <a [routerLink]="['/vehicles', reservation.vehicle?.id]">View Vehicle Details</a>
+          </div>
+        </div>
+
+        <div class="reservation-section">
+          <h2>Reservation Details</h2>
+          <div class="details-grid">
+            <div class="detail-item">
+              <span class="detail-label">Start Date</span>
+              <span class="detail-value">{{ reservation.startDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">End Date</span>
+              <span class="detail-value">{{ reservation.endDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Duration</span>
+              <span class="detail-value">
+                {{ reservation.endDate | date:'mediumDate':'':'en-US':'UTC' | dateRange:reservation.startDate }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Payment Status</span>
+              <span class="detail-value status-badge" [ngClass]="'payment-' + reservation.paymentStatus">
+                {{ reservation.paymentStatus | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reservation-section">
+          <h2>Client Information</h2>
+          <div class="client-details">
+            <div class="client-name">
+              {{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}
+            </div>
+            <div class="client-contact">
+              <span>{{ reservation.client.user.email }}</span>
+              <span *ngIf="reservation.client.user.phone">
+                | {{ reservation.client.user.phone }}
+              </span>
+            </div>
+            <a [routerLink]="['/clients', reservation.client.id]">View Client Profile</a>
+          </div>
+        </div>
+
+        <div class="reservation-section" *ngIf="reservation.notes">
+          <h2>Additional Notes</h2>
+          <p>{{ reservation.notes }}</p>
+        </div>
+      </div>
+
+      <div class="reservation-sidebar">
+        <div class="pricing-summary">
+          <h3>Pricing</h3>
+          <div class="price-details">
+            <div class="price-item">
+              <span>Total Amount</span>
+              <span>{{ reservation.totalAmount | currency }}</span>
+            </div>
+            <div class="price-item">
+              <span>Paid Amount</span>
+              <span>{{ reservation.paidAmount | currency }}</span>
+            </div>
+            <div class="price-item total">
+              <span>Remaining Balance</span>
+              <span>{{ reservation.totalAmount - reservation.paidAmount | currency }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="additional-services" *ngIf="reservation.additionalServices">
+          <h3>Additional Services</h3>
+          <ul>
+            <li *ngFor="let service of reservation.additionalServices | keyvalue">
+              {{ service.key | titlecase }}: {{ service.value }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
