@@ -1,0 +1,257 @@
+<div class="container mx-auto px-4 py-6">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    <p class="ml-3 text-gray-600">Loading vehicle details...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="bg-red-50 border-l-4 border-red-400 p-4 my-6">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-700">Error loading vehicle details. The vehicle might not exist or has been removed.</p>
+        <div class="mt-4">
+          <button routerLink="/vehicles" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Back to Vehicles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle details -->
+  <div *ngIf="!loading && !error && vehicle">
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <div class="flex items-center">
+          <a routerLink="/vehicles" class="text-gray-500 hover:text-gray-700 mr-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <h1 class="text-2xl font-bold text-gray-900">{{ vehicle.name }}</h1>
+        </div>
+        <p class="mt-1 text-gray-600">{{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}</p>
+        <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium"
+              [ngClass]="{
+                'bg-green-100 text-green-800': vehicle.status === 'available',
+                'bg-yellow-100 text-yellow-800': vehicle.status === 'reserved',
+                'bg-blue-100 text-blue-800': vehicle.status === 'occupied',
+                'bg-red-100 text-red-800': vehicle.status === 'maintenance',
+                'bg-gray-100 text-gray-800': vehicle.status === 'inactive'
+              }">
+          {{ vehicle.status | titlecase }}
+        </span>
+      </div>
+      <div class="flex space-x-2" *ngIf="isAdmin || isStaff">
+        <a [routerLink]="['/vehicles', vehicle.id, 'edit']" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Edit
+        </a>
+        <button *ngIf="isAdmin" (click)="deleteVehicle()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+        <div class="md:col-span-2">
+          <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
+            <img [src]="activeImageUrl || vehicle.mainImageUrl || '/assets/images/vehicle-placeholder.jpg'"
+                 [alt]="vehicle.name"
+                 class="object-cover w-full h-full">
+          </div>
+        </div>
+        <div>
+          <div class="grid grid-cols-3 gap-2" *ngIf="vehicle.imageUrls && vehicle.imageUrls.length > 0">
+            <div *ngFor="let imageUrl of vehicle.imageUrls"
+                 (click)="setActiveImage(imageUrl)"
+                 class="aspect-w-1 aspect-h-1 cursor-pointer rounded-md overflow-hidden"
+                 [ngClass]="{'ring-2 ring-blue-500': activeImageUrl === imageUrl}">
+              <img [src]="imageUrl" alt="Vehicle thumbnail" class="object-cover">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Description</h3>
+        <p class="mt-3 text-gray-600">{{ vehicle.description }}</p>
+      </div>
+
+      <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+        <dl class="sm:divide-y sm:divide-gray-200">
+          <!-- Vehicle Specifications -->
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Vehicle Type</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.vehicleType | titlecase | replace:'_':' ' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Make & Model</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.make }} {{ vehicle.model }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Year</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.year }}</dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">VIN</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.vin }}</dd>
+          </div>
+          <div *ngIf="vehicle.licensePlate" class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">License Plate</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.licensePlate }}</dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Mileage</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.mileage | number }} miles
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Transmission</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.transmissionType | titlecase | replace:'_':' ' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Fuel Type</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.fuelType | titlecase }}
+            </dd>
+          </div>
+          <div *ngIf="vehicle.fuelEconomy" class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Fuel Economy</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.fuelEconomy }}</dd>
+          </div>
+          <div *ngIf="vehicle.drivetrain" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Drivetrain</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.drivetrain | uppercase }}</dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Seating Capacity</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ vehicle.seatingCapacity }} persons
+            </dd>
+          </div>
+          <div *ngIf="vehicle.trunkCapacity" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Trunk Capacity</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.trunkCapacity }}</dd>
+          </div>
+          <div *ngIf="vehicle.exteriorColor" class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Exterior Color</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.exteriorColor }}</dd>
+          </div>
+          <div *ngIf="vehicle.interiorColor" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Interior Color</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ vehicle.interiorColor }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Luxury Features -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg" *ngIf="vehicle.luxuryFeatures && objectKeys(vehicle.luxuryFeatures).length > 0">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Luxury Features</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-2">
+            <div *ngFor="let feature of vehicle.luxuryFeatures | keyvalue" class="flex items-center">
+              <svg *ngIf="feature.value" class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <svg *ngIf="!feature.value" class="h-5 w-5 text-gray-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+              <span class="text-sm text-gray-900">{{ feature.key | titlecase | replace:'_':' ' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safety Features -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg" *ngIf="vehicle.safetyFeatures && objectKeys(vehicle.safetyFeatures).length > 0">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Safety Features</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-2">
+            <div *ngFor="let feature of vehicle.safetyFeatures | keyvalue" class="flex items-center">
+              <svg *ngIf="feature.value" class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <svg *ngIf="!feature.value" class="h-5 w-5 text-gray-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+              <span class="text-sm text-gray-900">{{ feature.key | titlecase | replace:'_':' ' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technology Features -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg" *ngIf="vehicle.technologyFeatures && objectKeys(vehicle.technologyFeatures).length > 0">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Technology Features</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-2">
+            <div *ngFor="let feature of vehicle.technologyFeatures | keyvalue" class="flex items-center">
+              <svg *ngIf="feature.value" class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <svg *ngIf="!feature.value" class="h-5 w-5 text-gray-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+              <span class="text-sm text-gray-900">{{ feature.key | titlecase | replace:'_':' ' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rental Information -->
+    <div class="mt-6 bg-white shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Rental Information</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 class="text-base font-medium text-gray-900 mb-2">Pricing</h4>
+            <p class="text-2xl font-bold text-blue-600">{{ vehicle.baseRate | currency }} <span class="text-sm font-normal text-gray-500">per day</span></p>
+            <p *ngIf="vehicle.securityDeposit" class="mt-1 text-sm text-gray-600">
+              Security Deposit: {{ vehicle.securityDeposit | currency }}
+            </p>
+          </div>
+          <div>
+            <h4 class="text-base font-medium text-gray-900 mb-2">Location</h4>
+            <p class="text-sm text-gray-600">{{ vehicle.location }}</p>
+            <p *ngIf="vehicle.currentLocation" class="mt-1 text-sm text-gray-600">
+              Current Location: {{ vehicle.currentLocation }}
+            </p>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a routerLink="/reservations/new" [queryParams]="{vehicleId: vehicle.id}"
+             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Make Reservation
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

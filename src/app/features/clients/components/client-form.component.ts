@@ -37,6 +37,8 @@ export class ClientFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log(id);
+
     if (id) {
       this.isEditMode = true;
       this.clientId = +id;

@@ -8,7 +8,7 @@ import { Staff, EmploymentType } from '../../../core/models/staff.model';
 import { Department } from '../../../core/models/department.model';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { UserType } from '../../../core/models/user.model';
-import { ReplacePipe } from '../../../core/pipes/replace.pipe';
+import { ReplacePipe } from '../../../shared/pipes/replace.pipe';
 
 @Component({
   selector: 'app-staff-list',

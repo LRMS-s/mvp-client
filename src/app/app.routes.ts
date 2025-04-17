@@ -70,8 +70,8 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./core/auth/auth.routes').then((r) => r.AUTH_ROUTES),
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+  // {
+  //   path: '**',
+  //   redirectTo: '',
+  // },
 ];

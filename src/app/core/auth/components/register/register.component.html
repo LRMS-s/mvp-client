@@ -1,0 +1,189 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create a new account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a routerLink="/auth/login" class="font-medium text-blue-600 hover:text-blue-500">
+          sign in to existing account
+        </a>
+      </p>
+    </div>
+
+    <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="rounded-md shadow-sm space-y-4">
+        <!-- First Name and Last Name -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label for="firstName" class="block text-sm font-medium text-gray-700">
+              First Name *
+            </label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              formControlName="firstName"
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+              [ngClass]="{ 'border-red-500': submitted && f['firstName'].errors }"
+            >
+            <div *ngIf="submitted && f['firstName'].errors" class="text-red-500 text-xs mt-1">
+              <div *ngIf="f['firstName'].errors['required']">First name is required</div>
+            </div>
+          </div>
+          <div>
+            <label for="lastName" class="block text-sm font-medium text-gray-700">
+              Last Name *
+            </label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              formControlName="lastName"
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+              [ngClass]="{ 'border-red-500': submitted && f['lastName'].errors }"
+            >
+            <div *ngIf="submitted && f['lastName'].errors" class="text-red-500 text-xs mt-1">
+              <div *ngIf="f['lastName'].errors['required']">Last name is required</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">
+            Username *
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            formControlName="username"
+            required
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+            [ngClass]="{ 'border-red-500': submitted && f['username'].errors }"
+          >
+          <div *ngIf="submitted && f['username'].errors" class="text-red-500 text-xs mt-1">
+            <div *ngIf="f['username'].errors['required']">Username is required</div>
+            <div *ngIf="f['username'].errors['minlength']">Username must be at least 3 characters</div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Email address *
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            formControlName="email"
+            required
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+            [ngClass]="{ 'border-red-500': submitted && f['email'].errors }"
+          >
+          <div *ngIf="submitted && f['email'].errors" class="text-red-500 text-xs mt-1">
+            <div *ngIf="f['email'].errors['required']">Email is required</div>
+            <div *ngIf="f['email'].errors['email']">Email must be a valid email address</div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Password *
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            formControlName="password"
+            required
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+            [ngClass]="{ 'border-red-500': submitted && f['password'].errors }"
+          >
+          <div *ngIf="submitted && f['password'].errors" class="text-red-500 text-xs mt-1">
+            <div *ngIf="f['password'].errors['required']">Password is required</div>
+            <div *ngIf="f['password'].errors['minLength']">Password must be at least 8 characters</div>
+            <div *ngIf="f['password'].errors['requireUppercase']">Password must contain an uppercase letter</div>
+            <div *ngIf="f['password'].errors['requireLowercase']">Password must contain a lowercase letter</div>
+            <div *ngIf="f['password'].errors['requireDigit']">Password must contain a number</div>
+            <div *ngIf="f['password'].errors['requireSpecialChar']">Password must contain a special character</div>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+            Confirm Password *
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            required
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mt-1"
+            [ngClass]="{ 'border-red-500': submitted && f['confirmPassword'].errors }"
+          >
+          <div *ngIf="submitted && f['confirmPassword'].errors" class="text-red-500 text-xs mt-1">
+            <div *ngIf="f['confirmPassword'].errors['required']">Please confirm your password</div>
+            <div *ngIf="f['confirmPassword'].errors['passwordMismatch']">Passwords do not match</div>
+          </div>
+        </div>
+
+        <!-- User Type -->
+        <div>
+          <label for="userType" class="block text-sm font-medium text-gray-700">
+            Register as
+          </label>
+          <select
+            id="userType"
+            name="userType"
+            formControlName="userType"
+            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          >
+            <option [value]="'client'">Client</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="bg-red-50 border-l-4 border-red-400 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ error }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-blue-500 group-hover:text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          {{ loading ? 'Creating account...' : 'Create account' }}
+        </button>
+      </div>
+      <div class="text-center">
+        <p class="text-xs text-gray-500">
+          By creating an account, you agree to our terms and conditions and privacy policy.
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

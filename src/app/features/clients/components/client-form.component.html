@@ -1,5 +1,4 @@
 
-// src/app/features/clients/components/client-form.component.html
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <div class="flex items-center">
@@ -111,7 +110,7 @@
               formControlName="phone"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
           </div>
-
+          {{isEditMode}}
           <div *ngIf="!isEditMode" class="sm:col-span-2">
             <label for="password"
               class="block text-sm font-medium text-gray-700">Password *</label>

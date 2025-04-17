@@ -19,7 +19,7 @@ import { UserType } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { passwordValidator } from '../../../shared/validators/password.validator';
-import { ReplacePipe } from '../../../core/pipes/replace.pipe';
+import { ReplacePipe } from '../../../shared/pipes/replace.pipe';
 
 @Component({
   selector: 'app-staff-form',

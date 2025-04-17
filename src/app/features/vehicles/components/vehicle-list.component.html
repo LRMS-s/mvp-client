@@ -1,0 +1,175 @@
+<div class="vehicles-container">
+  <header class="page-header">
+    <h1>Vehicles</h1>
+    <a routerLink="/vehicles/new" class="btn-primary">Add New Vehicle</a>
+  </header>
+
+  <div class="filters-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="search-field">
+        <app-search-bar
+          [value]="filterForm.get('searchTerm')?.value"
+          (valueChange)="filterForm.get('searchTerm')?.setValue($event)"
+          placeholder="Search vehicles by name, make, model..."
+        ></app-search-bar>
+      </div>
+
+      <div class="filter-fields">
+        <div class="filter-field">
+          <label for="vehicleType">Vehicle Type</label>
+          <select id="vehicleType" formControlName="vehicleType" class="form-control">
+            <option value="">All Types</option>
+            <option *ngFor="let type of vehicleTypes" [value]="type">
+              {{ type | titlecase | replace:'_':' ' }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="transmissionType">Transmission</label>
+          <select id="transmissionType" formControlName="transmissionType" class="form-control">
+            <option value="">All Transmissions</option>
+            <option *ngFor="let type of transmissionTypes" [value]="type">
+              {{ type | titlecase | replace:'_':' ' }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="fuelType">Fuel Type</label>
+          <select id="fuelType" formControlName="fuelType" class="form-control">
+            <option value="">All Fuel Types</option>
+            <option *ngFor="let type of fuelTypes" [value]="type">
+              {{ type | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status" class="form-control">
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of vehicleStatuses" [value]="status">
+              {{ status | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="minYear">Min Year</label>
+          <input
+            type="number"
+            id="minYear"
+            formControlName="minYear"
+            min="1990"
+            class="form-control"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="maxPrice">Max Price/Day</label>
+          <input
+            type="number"
+            id="maxPrice"
+            formControlName="maxPrice"
+            min="0"
+            class="form-control"
+          >
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="resetFilters()">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading vehicles...</p>
+  </div>
+
+  <div *ngIf="!loading && filteredVehicles.length === 0" class="empty-state">
+    <p>No vehicles found matching your criteria.</p>
+  </div>
+
+  <div *ngIf="!loading && filteredVehicles.length > 0" class="vehicle-grid">
+    <div *ngFor="let vehicle of paginatedVehicles" class="vehicle-card">
+      <div class="vehicle-img">
+        <img [src]="vehicle.mainImageUrl || '/assets/images/vehicle-placeholder.jpg'" [alt]="vehicle.name">
+        <div class="vehicle-badge" [ngClass]="'status-' + vehicle.status">
+          {{ vehicle.status }}
+        </div>
+      </div>
+
+      <div class="vehicle-content">
+        <h2 class="vehicle-title">{{ vehicle.name }}</h2>
+        <p class="vehicle-make">{{ vehicle.make }} {{ vehicle.model }} ({{ vehicle.year }})</p>
+
+        <div class="vehicle-features">
+          <span class="feature">
+            <i class="feature-icon transmission-icon"></i>
+            {{ vehicle.transmissionType | titlecase | replace:'_':' ' }}
+          </span>
+          <span class="feature">
+            <i class="feature-icon fuel-icon"></i>
+            {{ vehicle.fuelType | titlecase }}
+          </span>
+          <span class="feature">
+            <i class="feature-icon seats-icon"></i>
+            {{ vehicle.seatingCapacity }} Seats
+          </span>
+        </div>
+
+        <div class="vehicle-footer">
+          <div class="vehicle-price">
+            {{ vehicle.baseRate | currency }} / day
+          </div>
+          <a [routerLink]="['/vehicles', vehicle.id]" class="btn-view">View Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+      {{ Math.min(currentPage * itemsPerPage, filteredVehicles.length) }}
+      of {{ filteredVehicles.length }} vehicles
+    </div>
+
+    <div class="pagination-controls">
+      <button
+        (click)="changePage(1)"
+        [disabled]="currentPage === 1"
+      >
+        First
+      </button>
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+
+      <button
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        (click)="changePage(i + 1)"
+        [class.active]="currentPage === i + 1"
+      >
+        {{ i + 1 }}
+      </button>
+
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        (click)="changePage(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        Last
+      </button>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { Staff } from '../../../core/models/staff.model';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { UserType } from '../../../core/models/user.model';
 import { NotificationService } from '../../../core/services/notification.service';
-import { ReplacePipe } from '../../../core/pipes/replace.pipe';
+import { ReplacePipe } from '../../../shared/pipes/replace.pipe';
 
 @Component({
   selector: 'app-staff-detail',
