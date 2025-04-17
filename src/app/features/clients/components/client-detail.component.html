@@ -1,5 +1,4 @@
 
-// src/app/features/clients/components/client-detail.component.html
 <div class="container mx-auto px-4 py-6">
   <!-- Loading state -->
   <div *ngIf="isLoading" class="text-center py-8">
@@ -63,19 +62,19 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
       <div class="flex px-4 py-5 sm:px-6">
         <div class="mr-4">
-          <div *ngIf="!client.user.profileImageUrl"
+          <div *ngIf="!client.profileImageUrl"
             class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
             <span class="text-blue-800 font-medium text-xl">{{
-              client.user.firstName.charAt(0) }}{{
-              client.user.lastName.charAt(0) }}</span>
+              client.firstName.charAt(0) }}{{
+              client.lastName.charAt(0) }}</span>
           </div>
-          <img *ngIf="client.user.profileImageUrl"
-            class="h-16 w-16 rounded-full" [src]="client.user.profileImageUrl"
+          <img *ngIf="client.profileImageUrl"
+            class="h-16 w-16 rounded-full" [src]="client.profileImageUrl"
             alt>
         </div>
         <div>
           <h3 class="text-lg leading-6 font-medium text-gray-900">
-            {{ client.user.firstName }} {{ client.user.lastName }}
+            {{ client.firstName }} {{ client.lastName }}
           </h3>
           <p class="mt-1 max-w-2xl text-sm text-gray-500">
             {{ client.companyName ? 'Corporate Client' : 'Individual Client' }}
@@ -91,7 +90,7 @@
               Full name
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ client.user.firstName }} {{ client.user.lastName }}
+              {{ client.firstName }} {{ client.lastName }}
             </dd>
           </div>
           <div
@@ -100,7 +99,7 @@
               Email address
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ client.user.email }}
+              {{ client.email }}
             </dd>
           </div>
           <div
@@ -109,7 +108,7 @@
               Phone number
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ client.user.phone || 'Not provided' }}
+              {{ client.phone || 'Not provided' }}
             </dd>
           </div>
           <div
@@ -145,18 +144,18 @@
               Address
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <div *ngIf="client.user.address">
-                {{ client.user.address }}<br>
-                <ng-container *ngIf="client.user.city || client.user.state">
-                  {{ client.user.city }}{{ client.user.city && client.user.state
-                  ? ', ' : '' }}{{ client.user.state }}
+              <div *ngIf="client.address">
+                {{ client.address }}<br>
+                <ng-container *ngIf="client.city || client.state">
+                  {{ client.city }}{{ client.city && client.state
+                  ? ', ' : '' }}{{ client.state }}
                 </ng-container>
-                <ng-container *ngIf="client.user.postalCode">
-                  {{ client.user.postalCode }}
+                <ng-container *ngIf="client.postalCode">
+                  {{ client.postalCode }}
                 </ng-container>
-                <div *ngIf="client.user.country">{{ client.user.country }}</div>
+                <div *ngIf="client.country">{{ client.country }}</div>
               </div>
-              <div *ngIf="!client.user.address">
+              <div *ngIf="!client.address">
                 Not provided
               </div>
             </dd>
@@ -185,7 +184,6 @@
               Notes
             </dt>
 
-            // Continuing the client-detail.component.html template
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <p>{{ client.notes || 'No notes available' }}</p>
             </dd>

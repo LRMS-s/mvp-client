@@ -111,10 +111,10 @@ export class StaffListComponent implements OnInit {
       if (filters.searchTerm) {
         const searchTerm = filters.searchTerm.toLowerCase();
         const matchesSearch =
-          staffMember.user.firstName.toLowerCase().includes(searchTerm) ||
-          staffMember.user.lastName.toLowerCase().includes(searchTerm) ||
+          staffMember.firstName.toLowerCase().includes(searchTerm) ||
+          staffMember.lastName.toLowerCase().includes(searchTerm) ||
           staffMember.position.toLowerCase().includes(searchTerm) ||
-          staffMember.user.email.toLowerCase().includes(searchTerm);
+          staffMember.email.toLowerCase().includes(searchTerm);
 
         if (!matchesSearch) return false;
       }

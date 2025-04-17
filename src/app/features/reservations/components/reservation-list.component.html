@@ -112,7 +112,7 @@
         <tr *ngFor="let reservation of paginatedReservations">
           <td>{{ reservation.reservationNumber }}</td>
           <td>
-            {{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}
+            {{ reservation.client.firstName }} {{ reservation.client.lastName }}
           </td>
           <td>
             {{ reservation.itemType === 'property'

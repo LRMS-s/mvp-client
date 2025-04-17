@@ -87,46 +87,42 @@ export class StaffFormComponent implements OnInit {
   createForm(): FormGroup {
     return this.fb.group({
       // User information
-      user: this.fb.group({
-        firstName: ['', [Validators.required, Validators.maxLength(50)]],
-        lastName: ['', [Validators.required, Validators.maxLength(50)]],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.pattern(/^\+?[0-9\s()-]{10,}$/)]],
-        address: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        postalCode: [''],
-        // Conditional password validation
-        password: [
-          '',
-          this.isEditMode
-            ? []
-            : [
-                Validators.required,
-                passwordValidator({
-                  minLength: 8,
-                  requireUppercase: true,
-                  requireLowercase: true,
-                  requireDigit: true,
-                  requireSpecialChar: true,
-                }),
-              ],
-        ],
-        userType: [UserType.STAFF],
-      }),
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.pattern(/^\+?[0-9\s()-]{10,}$/)]],
+      address: [''],
+      city: [''],
+      state: [''],
+      country: [''],
+      postalCode: [''],
+      // Conditional password validation
+      password: [
+        '',
+        this.isEditMode
+          ? []
+          : [
+              Validators.required,
+              passwordValidator({
+                minLength: 8,
+                requireUppercase: true,
+                requireLowercase: true,
+                requireDigit: true,
+                requireSpecialChar: true,
+              }),
+            ],
+      ],
+      userType: [UserType.STAFF],
 
       // Staff-specific information
-      staff: this.fb.group({
-        departmentId: ['', [Validators.required]],
-        position: ['', [Validators.required, Validators.maxLength(100)]],
-        employmentType: ['', [Validators.required]],
-        hireDate: ['', [Validators.required]],
-        qualification: [''],
-        emergencyContact: [''],
-        salary: ['', [Validators.min(0)]],
-        isActive: [true],
-      }),
+      departmentId: ['', [Validators.required]],
+      position: ['', [Validators.required, Validators.maxLength(100)]],
+      employmentType: ['', [Validators.required]],
+      hireDate: ['', [Validators.required]],
+      qualification: [''],
+      emergencyContact: [''],
+      salary: ['', [Validators.min(0)]],
+      isActive: [true],
     });
   }
 
@@ -148,32 +144,27 @@ export class StaffFormComponent implements OnInit {
 
   patchForm(staff: Staff): void {
     // Remove password validator in edit mode
-    const userGroup = this.staffForm.get('user') as FormGroup;
-    userGroup.get('password')?.clearValidators();
-    userGroup.get('password')?.updateValueAndValidity();
+    this.staffForm.get('password')?.clearValidators();
+    this.staffForm.get('password')?.updateValueAndValidity();
 
     this.staffForm.patchValue({
-      user: {
-        firstName: staff.user.firstName,
-        lastName: staff.user.lastName,
-        email: staff.user.email,
-        phone: staff.user.phone,
-        address: staff.user.address,
-        city: staff.user.city,
-        state: staff.user.state,
-        country: staff.user.country,
-        postalCode: staff.user.postalCode,
-      },
-      staff: {
-        departmentId: staff.department.id,
-        position: staff.position,
-        employmentType: staff.employmentType,
-        hireDate: staff.hireDate,
-        qualification: staff.qualification,
-        emergencyContact: staff.emergencyContact,
-        salary: staff.salary,
-        isActive: staff.isActive,
-      },
+      firstName: staff.firstName,
+      lastName: staff.lastName,
+      email: staff.email,
+      phone: staff.phone,
+      address: staff.address,
+      city: staff.city,
+      state: staff.state,
+      country: staff.country,
+      postalCode: staff.postalCode,
+      departmentId: staff.department.id,
+      position: staff.position,
+      employmentType: staff.employmentType,
+      hireDate: staff.hireDate,
+      qualification: staff.qualification,
+      emergencyContact: staff.emergencyContact,
+      salary: staff.salary,
+      isActive: staff.isActive,
     });
   }
 
@@ -190,29 +181,25 @@ export class StaffFormComponent implements OnInit {
     if (this.isEditMode && this.staffId) {
       // In edit mode, update staff details
       const updateData = {
-        staff: {
-          departmentId: formValue.staff.departmentId,
-          position: formValue.staff.position,
-          employmentType: formValue.staff.employmentType,
-          hireDate: formValue.staff.hireDate,
-          qualification: formValue.staff.qualification,
-          emergencyContact: formValue.staff.emergencyContact,
-          salary: formValue.staff.salary,
-          isActive: formValue.staff.isActive,
-        },
-        user: {
-          firstName: formValue.user.firstName,
-          lastName: formValue.user.lastName,
-          phone: formValue.user.phone,
-          address: formValue.user.address,
-          city: formValue.user.city,
-          state: formValue.user.state,
-          country: formValue.user.country,
-          postalCode: formValue.user.postalCode,
-        },
+        departmentId: formValue.departmentId,
+        position: formValue.position,
+        employmentType: formValue.employmentType,
+        hireDate: formValue.hireDate,
+        qualification: formValue.qualification,
+        emergencyContact: formValue.emergencyContact,
+        salary: formValue.salary,
+        isActive: formValue.isActive,
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        phone: formValue.phone,
+        address: formValue.address,
+        city: formValue.city,
+        state: formValue.state,
+        country: formValue.country,
+        postalCode: formValue.postalCode,
       };
 
-      this.staffService.updateStaff(this.staffId, updateData.staff).subscribe({
+      this.staffService.updateStaff(this.staffId, updateData).subscribe({
         next: () => {
           this.notificationService.success('Staff member updated successfully');
           this.router.navigate(['/staff', this.staffId]);
@@ -227,21 +214,10 @@ export class StaffFormComponent implements OnInit {
     } else {
       // In create mode, send full staff and user data
       const createData: CreateStaffRequest = {
-        staff: {
-          departmentId: formValue.staff.departmentId,
-          position: formValue.staff.position,
-          employmentType: formValue.staff.employmentType,
-          hireDate: formValue.staff.hireDate,
-          qualification: formValue.staff.qualification,
-          emergencyContact: formValue.staff.emergencyContact,
-          salary: formValue.staff.salary,
-        },
-        user: {
-          ...formValue.user,
-          userType: UserType.STAFF,
-        },
+        ...formValue,
+        departmentId: +formValue.departmentId,
+        username: formValue.name + '_' + formValue.lastName,
       };
-
       this.staffService.createStaff(createData).subscribe({
         next: () => {
           this.notificationService.success('Staff member created successfully');

@@ -99,10 +99,8 @@ export class ReservationListComponent implements OnInit {
         const searchTerm = filters.searchTerm.toLowerCase();
         const matchesSearch =
           reservation.reservationNumber.toLowerCase().includes(searchTerm) ||
-          reservation.client.user.firstName
-            .toLowerCase()
-            .includes(searchTerm) ||
-          reservation.client.user.lastName.toLowerCase().includes(searchTerm);
+          reservation.client.firstName.toLowerCase().includes(searchTerm) ||
+          reservation.client.lastName.toLowerCase().includes(searchTerm);
 
         if (!matchesSearch) return false;
       }

@@ -1,4 +1,3 @@
-// src/app/features/clients/components/client-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -54,9 +53,9 @@ export class ClientListComponent implements OnInit {
       const searchTermLower = this.searchTerm.toLowerCase();
       this.filteredClients = this.clients.filter(
         (client) =>
-          client.user.firstName.toLowerCase().includes(searchTermLower) ||
-          client.user.lastName.toLowerCase().includes(searchTermLower) ||
-          client.user.email.toLowerCase().includes(searchTermLower) ||
+          client.firstName.toLowerCase().includes(searchTermLower) ||
+          client.lastName.toLowerCase().includes(searchTermLower) ||
+          client.email.toLowerCase().includes(searchTermLower) ||
           (client.companyName &&
             client.companyName.toLowerCase().includes(searchTermLower))
       );

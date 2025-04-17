@@ -1,0 +1,141 @@
+<div class="reservation-form-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading form data...</p>
+  </div>
+
+  <!-- Form Content -->
+  <div *ngIf="!isLoading" class="reservation-form">
+    <div class="form-header">
+      <h1>Create New Reservation</h1>
+    </div>
+
+    <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2>Item Type</h2>
+        <div class="item-type-selector">
+          <div class="item-type-option"
+               [class.selected]="selectedItemType === 'property'"
+               (click)="onItemTypeChange('property')">
+            <span class="item-type-icon">🏠</span>
+            <span class="item-type-label">Property</span>
+          </div>
+          <div class="item-type-option"
+               [class.selected]="selectedItemType === 'vehicle'"
+               (click)="onItemTypeChange('vehicle')">
+            <span class="item-type-icon">🚗</span>
+            <span class="item-type-label">Vehicle</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section" *ngIf="selectedItemType === 'property'">
+        <h2>Select Property</h2>
+        <div class="form-group">
+          <label for="propertyId">Property:</label>
+          <select id="propertyId"
+                  [class.invalid]="reservationForm.get('propertyId')?.invalid && reservationForm.get('propertyId')?.touched"
+                  (change)="onSelectedItemChange($event, 'propertyId')">
+            <option value="">-- Select a property --</option>
+            <option *ngFor="let property of properties" [value]="property.id">
+              {{ property.name }} - {{ property.location }}
+            </option>
+          </select>
+          <div class="error-message" *ngIf="reservationForm.get('propertyId')?.invalid && reservationForm.get('propertyId')?.touched">
+            Please select a property.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section" *ngIf="selectedItemType === 'vehicle'">
+        <h2>Select Vehicle</h2>
+        <div class="form-group">
+          <label for="vehicleId">Vehicle:</label>
+          <select id="vehicleId"
+                  [class.invalid]="reservationForm.get('vehicleId')?.invalid && reservationForm.get('vehicleId')?.touched"
+                  (change)="onSelectedItemChange($event, 'vehicleId')">
+            <option value="">-- Select a vehicle --</option>
+            <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+              {{ vehicle.name }} - {{ vehicle.make }} {{ vehicle.model }}
+            </option>
+          </select>
+          <div class="error-message" *ngIf="reservationForm.get('vehicleId')?.invalid && reservationForm.get('vehicleId')?.touched">
+            Please select a vehicle.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Client Information</h2>
+        <div class="form-group">
+          <label for="clientId">Client:</label>
+          <select id="clientId"
+                  formControlName="clientId"
+                  [class.invalid]="reservationForm.get('clientId')?.invalid && reservationForm.get('clientId')?.touched">
+            <option value="">-- Select a client --</option>
+            <option *ngFor="let client of clients" [value]="client.id">
+              {{ client.firstName }} {{ client.lastName }} - {{ client.email }}
+            </option>
+          </select>
+          <div class="error-message" *ngIf="reservationForm.get('clientId')?.invalid && reservationForm.get('clientId')?.touched">
+            Please select a client.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Reservation Dates</h2>
+        <div class="dates-container">
+          <div class="form-group">
+            <label for="startDate">Start Date:</label>
+            <input type="date"
+                   id="startDate"
+                   formControlName="startDate"
+                   [class.invalid]="reservationForm.get('startDate')?.invalid && reservationForm.get('startDate')?.touched">
+            <div class="error-message" *ngIf="reservationForm.get('startDate')?.invalid && reservationForm.get('startDate')?.touched">
+              Please select a start date.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date"
+                   id="endDate"
+                   formControlName="endDate"
+                   [class.invalid]="reservationForm.get('endDate')?.invalid && reservationForm.get('endDate')?.touched">
+            <div class="error-message" *ngIf="reservationForm.get('endDate')?.invalid && reservationForm.get('endDate')?.touched">
+              Please select an end date.
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-check-availability" (click)="checkAvailability()">
+          Check Availability
+        </button>
+      </div>
+
+      <div class="form-section" *ngIf="reservationForm.get('additionalServices')?.value && Object.keys(reservationForm.get('additionalServices')?.value).length > 0">
+        <h2>Additional Services</h2>
+        <div class="additional-services" formGroupName="additionalServices">
+          <div class="service-item" *ngFor="let service of (reservationForm.get('additionalServices') as FormGroup)?.controls | keyvalue : keyValueCompareFn">
+            <label>
+              <input type="checkbox" [formControlName]="service.key"> {{ service.key | titlecase }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Additional Notes</h2>
+        <div class="form-group">
+          <textarea id="notes" formControlName="notes" placeholder="Any special requests or additional information..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Creating...' : 'Create Reservation' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

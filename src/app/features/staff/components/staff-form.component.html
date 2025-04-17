@@ -46,7 +46,7 @@
       <h2 class="text-xl font-semibold text-gray-800 border-b pb-3 mb-4">
         Personal Information
       </h2>
-      <div formGroupName="user" class="grid md:grid-cols-2 gap-4">
+      <div class="grid md:grid-cols-2 gap-4">
         <!-- First Name -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -58,15 +58,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('user.firstName')?.invalid &&
-                staffForm.get('user.firstName')?.touched
+                staffForm.get('firstName')?.invalid &&
+                staffForm.get('firstName')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('user.firstName')?.invalid && staffForm.get('user.firstName')?.touched"
+            *ngIf="staffForm.get('firstName')?.invalid && staffForm.get('firstName')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('user', 'firstName') }}
+            {{ getFieldError('staffForm', 'firstName') }}
           </p>
         </div>
 
@@ -81,15 +81,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('user.lastName')?.invalid &&
-                staffForm.get('user.lastName')?.touched
+                staffForm.get('lastName')?.invalid &&
+                staffForm.get('lastName')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('user.lastName')?.invalid && staffForm.get('user.lastName')?.touched"
+            *ngIf="staffForm.get('lastName')?.invalid && staffForm.get('lastName')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('user', 'lastName') }}
+            {{ getFieldError('staffForm',  'lastName') }}
           </p>
         </div>
 
@@ -105,16 +105,16 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('user.email')?.invalid &&
-                staffForm.get('user.email')?.touched,
+                staffForm.get('email')?.invalid &&
+                staffForm.get('email')?.touched,
               'bg-gray-100': isEditMode
             }"
           >
           <p
-            *ngIf="staffForm.get('user.email')?.invalid && staffForm.get('user.email')?.touched"
+            *ngIf="staffForm.get('email')?.invalid && staffForm.get('email')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('user', 'email') }}
+            {{ getFieldError('staffForm', 'email') }}
           </p>
         </div>
 
@@ -129,15 +129,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('user.phone')?.invalid &&
-                staffForm.get('user.phone')?.touched
+                staffForm.get('phone')?.invalid &&
+                staffForm.get('phone')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('user.phone')?.invalid && staffForm.get('user.phone')?.touched"
+            *ngIf="staffForm.get('phone')?.invalid && staffForm.get('phone')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('user', 'phone') }}
+            {{ getFieldError('staffForm', 'phone') }}
           </p>
         </div>
 
@@ -152,15 +152,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('user.password')?.invalid &&
-                staffForm.get('user.password')?.touched
+                staffForm.get('password')?.invalid &&
+                staffForm.get('password')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('user.password')?.invalid && staffForm.get('user.password')?.touched"
+            *ngIf="staffForm.get('password')?.invalid && staffForm.get('password')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('user', 'password') }}
+            {{ getFieldError('staffForm', 'password') }}
           </p>
           <p class="text-xs text-gray-500 mt-1">
             Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.
@@ -174,7 +174,7 @@
       <h2 class="text-xl font-semibold text-gray-800 border-b pb-3 mb-4">
         Employment Details
       </h2>
-      <div formGroupName="staff" class="grid md:grid-cols-2 gap-4">
+      <div  class="grid md:grid-cols-2 gap-4">
         <!-- Department -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -185,8 +185,8 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('staff.departmentId')?.invalid &&
-                staffForm.get('staff.departmentId')?.touched
+                staffForm.get('departmentId')?.invalid &&
+                staffForm.get('departmentId')?.touched
             }"
           >
             <option value="">Select Department</option>
@@ -198,10 +198,10 @@
             </option>
           </select>
           <p
-            *ngIf="staffForm.get('staff.departmentId')?.invalid && staffForm.get('staff.departmentId')?.touched"
+            *ngIf="staffForm.get('departmentId')?.invalid && staffForm.get('departmentId')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('staff', 'departmentId') }}
+            {{ getFieldError('staffForm', 'departmentId') }}
           </p>
         </div>
 
@@ -216,15 +216,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('staff.position')?.invalid &&
-                staffForm.get('staff.position')?.touched
+                staffForm.get('position')?.invalid &&
+                staffForm.get('position')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('staff.position')?.invalid && staffForm.get('staff.position')?.touched"
+            *ngIf="staffForm.get('position')?.invalid && staffForm.get('position')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('staff', 'position') }}
+            {{ getFieldError('staffForm', 'position') }}
           </p>
         </div>
 
@@ -238,8 +238,8 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('staff.employmentType')?.invalid &&
-                staffForm.get('staff.employmentType')?.touched
+                staffForm.get('employmentType')?.invalid &&
+                staffForm.get('employmentType')?.touched
             }"
           >
             <option value="">Select Employment Type</option>
@@ -251,10 +251,10 @@
             </option>
           </select>
           <p
-            *ngIf="staffForm.get('staff.employmentType')?.invalid && staffForm.get('staff.employmentType')?.touched"
+            *ngIf="staffForm.get('employmentType')?.invalid && staffForm.get('employmentType')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('staff', 'employmentType') }}
+            {{ getFieldError('staffForm', 'employmentType') }}
           </p>
         </div>
 
@@ -269,15 +269,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('staff.hireDate')?.invalid &&
-                staffForm.get('staff.hireDate')?.touched
+                staffForm.get('hireDate')?.invalid &&
+                staffForm.get('hireDate')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('staff.hireDate')?.invalid && staffForm.get('staff.hireDate')?.touched"
+            *ngIf="staffForm.get('hireDate')?.invalid && staffForm.get('hireDate')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('staff', 'hireDate') }}
+            {{ getFieldError('staffForm', 'hireDate') }}
           </p>
         </div>
 
@@ -292,15 +292,15 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             [ngClass]="{
               'border-red-500 focus:ring-red-500':
-                staffForm.get('staff.salary')?.invalid &&
-                staffForm.get('staff.salary')?.touched
+                staffForm.get('salary')?.invalid &&
+                staffForm.get('salary')?.touched
             }"
           >
           <p
-            *ngIf="staffForm.get('staff.salary')?.invalid && staffForm.get('staff.salary')?.touched"
+            *ngIf="staffForm.get('salary')?.invalid && staffForm.get('salary')?.touched"
             class="text-red-500 text-xs mt-1"
           >
-            {{ getFieldError('staff', 'salary') }}
+            {{ getFieldError('staffForm', 'salary') }}
           </p>
         </div>
       </div>
@@ -311,7 +311,7 @@
       <h2 class="text-xl font-semibold text-gray-800 border-b pb-3 mb-4">
         Additional Information
       </h2>
-      <div formGroupName="staff" class="grid md:grid-cols-2 gap-4">
+      <div class="grid md:grid-cols-2 gap-4">
         <!-- Qualification -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">

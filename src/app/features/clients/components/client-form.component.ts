@@ -49,23 +49,22 @@ export class ClientFormComponent implements OnInit {
   createForm(): FormGroup {
     return this.fb.group({
       // User information
-      user: this.fb.group({
-        firstName: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        phone: [''],
-        address: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        postalCode: [''],
-        // In edit mode, we don't update password
-        password: [
-          '',
-          this.isEditMode ? [] : [Validators.required, Validators.minLength(8)],
-        ],
-        userType: [UserType.CLIENT],
-      }),
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      address: [''],
+      city: [''],
+      state: [''],
+      country: [''],
+      postalCode: [''],
+      // In edit mode, we don't update password
+      password: [
+        '',
+        this.isEditMode ? [] : [Validators.required, Validators.minLength(8)],
+      ],
+      userType: [UserType.CLIENT],
       // Client specific information
       companyName: [''],
       nationality: [''],
@@ -99,16 +98,16 @@ export class ClientFormComponent implements OnInit {
     // Patch form with client data
     this.clientForm.patchValue({
       user: {
-        firstName: client.user.firstName,
-        lastName: client.user.lastName,
-        email: client.user.email,
-        phone: client.user.phone,
-        address: client.user.address,
-        city: client.user.city,
-        state: client.user.state,
-        country: client.user.country,
-        postalCode: client.user.postalCode,
-        userType: client.user.userType,
+        firstName: client.firstName,
+        lastName: client.lastName,
+        email: client.email,
+        phone: client.phone,
+        address: client.address,
+        city: client.city,
+        state: client.state,
+        country: client.country,
+        postalCode: client.postalCode,
+        userType: client.userType,
       },
       companyName: client.companyName,
       nationality: client.nationality,

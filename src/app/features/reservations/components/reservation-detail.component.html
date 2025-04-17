@@ -91,12 +91,12 @@
           <h2>Client Information</h2>
           <div class="client-details">
             <div class="client-name">
-              {{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}
+              {{ reservation.client.firstName }} {{ reservation.client.lastName }}
             </div>
             <div class="client-contact">
-              <span>{{ reservation.client.user.email }}</span>
-              <span *ngIf="reservation.client.user.phone">
-                | {{ reservation.client.user.phone }}
+              <span>{{ reservation.client.email }}</span>
+              <span *ngIf="reservation.client.phone">
+                | {{ reservation.client.phone }}
               </span>
             </div>
             <a [routerLink]="['/clients', reservation.client.id]">View Client Profile</a>

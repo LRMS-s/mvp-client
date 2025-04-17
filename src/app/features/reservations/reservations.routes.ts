@@ -11,14 +11,14 @@ export const RESERVATIONS_ROUTES: Routes = [
       ),
     canActivate: [authGuard],
   },
-  // {
-  //   path: 'new',
-  //   loadComponent: () =>
-  //     import('./components/reservation-form.component').then(
-  //       (c) => c.ReservationFormComponent
-  //     ),
-  //   canActivate: [authGuard],
-  // },
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./components/reservation-form.component').then(
+        (c) => c.ReservationFormComponent
+      ),
+    canActivate: [authGuard],
+  },
   {
     path: 'calendar',
     loadComponent: () =>

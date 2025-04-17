@@ -1,6 +1,6 @@
 import { User } from './user.model';
 
-export interface Client {
+export interface Client extends User {
   id: number;
   companyName?: string;
   nationality?: string;
@@ -8,7 +8,6 @@ export interface Client {
   clientSince: Date;
   clientSource?: string;
   notes?: string;
-  user: User;
 }
 
 export interface CreateClientRequest {

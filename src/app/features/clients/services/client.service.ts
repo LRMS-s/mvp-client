@@ -4,15 +4,15 @@ import { ApiService } from '../../../core/services/api.service';
 import { Client, CreateClientRequest } from '../../../core/models/client.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
-  private readonly endpoint = 'clients';
+  private readonly endpoint = 'users';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
-  getClients(params: any = {}): Observable<Client[]> {
-    return this.apiService.get<Client[]>(this.endpoint, params);
+  getClients(): Observable<Client[]> {
+    return this.apiService.get<Client[]>(`${this.endpoint}/clients`);
   }
 
   getClient(id: number): Observable<Client> {
@@ -35,8 +35,14 @@ export class ClientService {
     return this.apiService.patch<Client>(`${this.endpoint}/${id}`, client);
   }
 
-  updateClientByUserId(userId: number, client: Partial<Client>): Observable<Client> {
-    return this.apiService.patch<Client>(`${this.endpoint}/users/${userId}`, client);
+  updateClientByUserId(
+    userId: number,
+    client: Partial<Client>
+  ): Observable<Client> {
+    return this.apiService.patch<Client>(
+      `${this.endpoint}/users/${userId}`,
+      client
+    );
   }
 
   deleteClient(id: number): Observable<void> {
@@ -44,7 +50,9 @@ export class ClientService {
   }
 
   searchClients(query: string): Observable<Client[]> {
-    return this.apiService.get<Client[]>(`${this.endpoint}/search`, { q: query });
+    return this.apiService.get<Client[]>(`${this.endpoint}/search`, {
+      q: query,
+    });
   }
 
   getClientStatistics(): Observable<any> {

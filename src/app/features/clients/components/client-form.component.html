@@ -46,7 +46,7 @@
         <h2 class="text-lg font-medium text-gray-900 mb-4">Basic
           Information</h2>
 
-        <div formGroupName="user"
+        <div
           class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
           <div>
             <label for="firstName"
@@ -57,11 +57,11 @@
               id="firstName"
               formControlName="firstName"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}">
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': clientForm.get('firstName')?.invalid && clientForm.get('firstName')?.touched}">
             <p
-              *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+              *ngIf="clientForm.get('firstName')?.invalid && clientForm.get('firstName')?.touched"
               class="mt-2 text-sm text-red-600">
-              {{ getFieldError(userForm, 'firstName') }}
+              {{ getFieldError(clientForm, 'firstName') }}
             </p>
           </div>
 
@@ -74,11 +74,11 @@
               id="lastName"
               formControlName="lastName"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}">
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': clientForm.get('lastName')?.invalid && clientForm.get('lastName')?.touched}">
             <p
-              *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+              *ngIf="clientForm.get('lastName')?.invalid && clientForm.get('lastName')?.touched"
               class="mt-2 text-sm text-red-600">
-              {{ getFieldError(userForm, 'lastName') }}
+              {{ getFieldError(clientForm, 'lastName') }}
             </p>
           </div>
 
@@ -91,12 +91,12 @@
               id="email"
               formControlName="email"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': clientForm.get('email')?.invalid && clientForm.get('email')?.touched}"
               [attr.disabled]="isEditMode ? true : null">
             <p
-              *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+              *ngIf="clientForm.get('email')?.invalid && clientForm.get('email')?.touched"
               class="mt-2 text-sm text-red-600">
-              {{ getFieldError(userForm, 'email') }}
+              {{ getFieldError(clientForm, 'email') }}
             </p>
           </div>
 
@@ -110,7 +110,16 @@
               formControlName="phone"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
           </div>
-          {{isEditMode}}
+        <div>
+          <label for="username"
+            class="block text-sm font-medium text-gray-700">Username</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
+
+        </div>
           <div *ngIf="!isEditMode" class="sm:col-span-2">
             <label for="password"
               class="block text-sm font-medium text-gray-700">Password *</label>
@@ -119,11 +128,11 @@
               id="password"
               formControlName="password"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-500': clientForm.get('password')?.invalid && clientForm.get('password')?.touched}">
             <p
-              *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+              *ngIf="clientForm.get('password')?.invalid && clientForm.get('password')?.touched"
               class="mt-2 text-sm text-red-600">
-              {{ getFieldError(userForm, 'password') }}
+              {{ getFieldError(clientForm, 'password') }}
             </p>
             <p class="mt-1 text-sm text-gray-500">
               Password must be at least 8 characters long.
@@ -190,7 +199,7 @@
         </div>
       </div>
 
-      <div class="p-6 border-b border-gray-200" formGroupName="user">
+      <div class="p-6 border-b border-gray-200" >
         <h2 class="text-lg font-medium text-gray-900 mb-4">Address
           Information</h2>
 

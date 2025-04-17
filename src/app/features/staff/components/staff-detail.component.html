@@ -1,133 +1,183 @@
-<div class="staff-detail-container">
-  <!-- Loading State -->
-  <div *ngIf="loading" class="loading-state">
-    <p>Loading staff member details...</p>
+<div class="container mx-auto px-4 py-6">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="text-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+    <p class="mt-3 text-gray-600">Loading staff details...</p>
   </div>
 
-  <!-- Error State -->
-  <div *ngIf="error" class="error-state">
-    <p>Error loading staff member details. The staff member might not exist or has been removed.</p>
-    <button routerLink="/staff" class="btn-primary">Back to Staff List</button>
+  <!-- Error state -->
+  <div *ngIf="!loading && error" class="bg-red-50 border-l-4 border-red-400 p-4 my-6">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-700">{{ error }}</p>
+      </div>
+    </div>
+    <div class="mt-4">
+      <a routerLink="/staff" class="text-sm font-medium text-red-600 hover:text-red-500">
+        Return to staff list
+      </a>
+    </div>
   </div>
 
-  <!-- Staff Details -->
-  <div *ngIf="!loading && !error && staff" class="staff-detail">
-    <div class="staff-header">
-      <div class="header-content">
-        <div class="profile-section">
-          <div *ngIf="!staff.user.profileImageUrl" class="profile-placeholder">
-            {{ staff.user.firstName[0] }}{{ staff.user.lastName[0] }}
-          </div>
-          <img
-            *ngIf="staff.user.profileImageUrl"
-            [src]="staff.user.profileImageUrl"
-            alt="Profile"
-            class="profile-image"
-          >
-          <div class="profile-info">
-            <h1>{{ staff.user.firstName }} {{ staff.user.lastName }}</h1>
-            <p class="position">{{ staff.position }}</p>
-            <div
-              class="status-badge"
-              [ngClass]="staff.isActive ? 'status-active' : 'status-inactive'"
-            >
-              {{ staff.isActive ? 'Active' : 'Inactive' }}
-            </div>
-          </div>
-        </div>
+  <!-- Staff details -->
+  <div *ngIf="!loading && !error && staff">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center">
+        <a routerLink="/staff" class="text-gray-500 hover:text-gray-700 mr-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <h1 class="text-2xl font-bold text-gray-800">Staff Details</h1>
+      </div>
+      <div class="space-x-2">
+        <a
+          [routerLink]="['/staff', staff.id, 'edit']"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Edit Staff
+        </a>
 
-        <div class="header-actions" *ngIf="isAdmin">
-          <a
-            [routerLink]="['/staff', staff.id, 'edit']"
-            class="btn-edit"
-          >
-            Edit Profile
-          </a>
-          <button
-            (click)="toggleStaffStatus()"
-            class="btn-toggle-status"
-            [ngClass]="staff.isActive ? 'btn-deactivate' : 'btn-activate'"
-          >
-            {{ staff.isActive ? 'Deactivate' : 'Activate' }}
-          </button>
-          <button
-            (click)="deleteStaffMember()"
-            class="btn-delete"
-          >
-            Delete
-          </button>
-        </div>
       </div>
     </div>
 
-    <div class="staff-body">
-      <div class="staff-main">
-        <div class="staff-section">
-          <h2>Contact Information</h2>
-          <div class="contact-details">
-            <div class="detail-item">
-              <span class="detail-label">Email</span>
-              <span class="detail-value">{{ staff.user.email }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Phone</span>
-              <span class="detail-value">
-                {{ staff.user.phone || 'Not provided' }}
-              </span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Address</span>
-              <span class="detail-value">
-                <ng-container *ngIf="staff.user.address">
-                  {{ staff.user.address }}<br>
-                  <ng-container *ngIf="staff.user.city || staff.user.state">
-                    {{ staff.user.city }}{{ staff.user.city && staff.user.state ? ', ' : '' }}{{ staff.user.state }}
-                  </ng-container>
-                  <div *ngIf="staff.user.postalCode">{{ staff.user.postalCode }}</div>
-                  <div *ngIf="staff.user.country">{{ staff.user.country }}</div>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+      <div class="flex px-4 py-5 sm:px-6">
+        <div class="mr-4">
+          <div
+            *ngIf="!staff.profileImageUrl"
+            class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center"
+          >
+            <span class="text-blue-800 font-medium text-xl">
+              {{ staff.firstName.charAt(0) }}{{ staff.lastName.charAt(0) }}
+            </span>
+          </div>
+          <img
+            *ngIf="staff.profileImageUrl"
+            class="h-16 w-16 rounded-full"
+            [src]="staff.profileImageUrl"
+            alt="Profile"
+          >
+        </div>
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            {{ staff.firstName }} {{ staff.lastName }}
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            {{ staff.position }}
+          </p>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200">
+        <dl>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Full Name</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.firstName }} {{ staff.lastName }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Email Address</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.email }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Phone Number</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.phone || 'Not provided' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Department</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.department.name }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Employment Type</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.employmentType | titlecase | replace:'_':' ' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Hire Date</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.hireDate | date:'longDate' }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Qualifications</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.qualification || 'Not provided' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Address</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div *ngIf="staff.address">
+                {{ staff.address }}<br>
+                <ng-container *ngIf="staff.city || staff.state">
+                  {{ staff.city }}{{ staff.city && staff.state ? ', ' : '' }}{{ staff.state }}
                 </ng-container>
-                <span *ngIf="!staff.user.address">No address provided</span>
-              </span>
-            </div>
+                <ng-container *ngIf="staff.postalCode">
+                  {{ staff.postalCode }}
+                </ng-container>
+                <div *ngIf="staff.country">{{ staff.country }}</div>
+              </div>
+              <div *ngIf="!staff.address">
+                Not provided
+              </div>
+            </dd>
           </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Emergency Contact</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.emergencyContact || 'Not provided' }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Salary</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ staff.salary | currency }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Performance or Projects Section (Similar to Reservations in Client Details) -->
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Performance</h2>
+
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="border-b border-gray-200 p-4 flex justify-between items-center">
+          <h3 class="text-lg font-medium text-gray-900">Performance Metrics</h3>
+          <a
+            [routerLink]="['/performance']"
+            [queryParams]="{staffId: staff.id}"
+            class="text-sm font-medium text-blue-600 hover:text-blue-500"
+          >
+            View Full Performance
+          </a>
         </div>
 
-        <div class="staff-section">
-          <h2>Employment Details</h2>
-          <div class="employment-details">
-            <div class="detail-item">
-              <span class="detail-label">Department</span>
-              <span class="detail-value">{{ staff.department.name }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Employment Type</span>
-              <span class="detail-value">
-                {{ staff.employmentType | titlecase | replace:'_':' ' }}
-              </span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Hire Date</span>
-              <span class="detail-value">{{ staff.hireDate | date:'longDate' }}</span>
-            </div>
-            <div class="detail-item" *ngIf="staff.qualification">
-              <span class="detail-label">Qualifications</span>
-              <span class="detail-value">{{ staff.qualification }}</span>
-            </div>
-            <div class="detail-item" *ngIf="staff.emergencyContact">
-              <span class="detail-label">Emergency Contact</span>
-              <span class="detail-value">{{ staff.emergencyContact }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="staff-section" *ngIf="staff.salary">
-          <h2>Compensation</h2>
-          <div class="compensation-details">
-            <div class="detail-item">
-              <span class="detail-label">Salary</span>
-              <span class="detail-value">{{ staff.salary | currency }}</span>
-            </div>
-          </div>
+        <!-- Placeholder for performance data -->
+        <div class="px-4 py-8 text-center text-gray-500">
+          <p>Performance data will be displayed here.</p>
+          <a
+            [routerLink]="['/performance/new']"
+            [queryParams]="{staffId: staff.id}"
+            class="inline-flex items-center mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Add Performance Review
+          </a>
         </div>
       </div>
     </div>

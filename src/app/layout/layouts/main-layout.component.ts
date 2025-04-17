@@ -1,4 +1,3 @@
-// src/app/layout/layouts/main-layout.component.ts
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';

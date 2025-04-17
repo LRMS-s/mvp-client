@@ -2,6 +2,7 @@
   <div class="page-header">
     <h1>Staff Members</h1>
     <a *ngIf="isAdmin" routerLink="/staff/new" class="btn-primary">Add New Staff Member</a>
+    <a *ngIf="isAdmin" routerLink="/staff/departments" class="btn-primary">Manage Departments</a>
   </div>
 
   <div class="filters-section">
@@ -98,21 +99,21 @@
         <tr *ngFor="let staffMember of paginatedStaff">
           <td>
             <div class="staff-profile">
-              <div *ngIf="!staffMember.user.profileImageUrl" class="profile-placeholder">
-                {{ staffMember.user.firstName[0] }}{{ staffMember.user.lastName[0] }}
+              <div *ngIf="!staffMember.profileImageUrl" class="profile-placeholder">
+                {{ staffMember.firstName[0] }}{{ staffMember.lastName[0] }}
               </div>
               <img
-                *ngIf="staffMember.user.profileImageUrl"
-                [src]="staffMember.user.profileImageUrl"
+                *ngIf="staffMember.profileImageUrl"
+                [src]="staffMember.profileImageUrl"
                 alt="Profile"
                 class="profile-image"
               >
               <div class="staff-name">
-                {{ staffMember.user.firstName }} {{ staffMember.user.lastName }}
+                {{ staffMember.firstName }} {{ staffMember.lastName }}
               </div>
             </div>
           </td>
-          <td>{{ staffMember.user.email }}</td>
+          <td>{{ staffMember.email }}</td>
           <td>{{ staffMember.department.name }}</td>
           <td>{{ staffMember.position }}</td>
           <td>{{ staffMember.employmentType | titlecase | replace:'_':' ' }}</td>

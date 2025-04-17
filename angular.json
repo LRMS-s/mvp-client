@@ -46,6 +46,18 @@
                   "maximumError": "8kB"
                 }
               ],
+              "outputPath": "dist/yy",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
               "outputHashing": "all"
             },
             "development": {

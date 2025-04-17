@@ -1,13 +1,11 @@
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Departments</h1>
-    <button
-      *ngIf="isAdmin"
-      (click)="resetForm()"
-      class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-    >
-      Add New Department
-    </button>
+    <div class="mt-4">
+      <a routerLink="/staff" class="text-sm font-medium text-red-600 hover:text-red-500">
+        Return to staff list
+      </a>
+    </div>
   </div>
 
   <!-- Department Form -->

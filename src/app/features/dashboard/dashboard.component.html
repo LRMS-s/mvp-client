@@ -64,7 +64,7 @@
           <tbody>
             <tr *ngFor="let reservation of stats.recentReservations">
               <td>{{ reservation.reservationNumber }}</td>
-              <td>{{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}</td>
+              <td>{{ reservation.client.firstName }} {{ reservation.client.lastName }}</td>
               <td>
                 {{ reservation.itemType === 'property' ? reservation.property?.name : reservation.vehicle?.name }}
               </td>
