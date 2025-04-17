@@ -1,0 +1,135 @@
+<div class="staff-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading staff member details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <p>Error loading staff member details. The staff member might not exist or has been removed.</p>
+    <button routerLink="/staff" class="btn-primary">Back to Staff List</button>
+  </div>
+
+  <!-- Staff Details -->
+  <div *ngIf="!loading && !error && staff" class="staff-detail">
+    <div class="staff-header">
+      <div class="header-content">
+        <div class="profile-section">
+          <div *ngIf="!staff.user.profileImageUrl" class="profile-placeholder">
+            {{ staff.user.firstName[0] }}{{ staff.user.lastName[0] }}
+          </div>
+          <img
+            *ngIf="staff.user.profileImageUrl"
+            [src]="staff.user.profileImageUrl"
+            alt="Profile"
+            class="profile-image"
+          >
+          <div class="profile-info">
+            <h1>{{ staff.user.firstName }} {{ staff.user.lastName }}</h1>
+            <p class="position">{{ staff.position }}</p>
+            <div
+              class="status-badge"
+              [ngClass]="staff.isActive ? 'status-active' : 'status-inactive'"
+            >
+              {{ staff.isActive ? 'Active' : 'Inactive' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="header-actions" *ngIf="isAdmin">
+          <a
+            [routerLink]="['/staff', staff.id, 'edit']"
+            class="btn-edit"
+          >
+            Edit Profile
+          </a>
+          <button
+            (click)="toggleStaffStatus()"
+            class="btn-toggle-status"
+            [ngClass]="staff.isActive ? 'btn-deactivate' : 'btn-activate'"
+          >
+            {{ staff.isActive ? 'Deactivate' : 'Activate' }}
+          </button>
+          <button
+            (click)="deleteStaffMember()"
+            class="btn-delete"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="staff-body">
+      <div class="staff-main">
+        <div class="staff-section">
+          <h2>Contact Information</h2>
+          <div class="contact-details">
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">{{ staff.user.email }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">
+                {{ staff.user.phone || 'Not provided' }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Address</span>
+              <span class="detail-value">
+                <ng-container *ngIf="staff.user.address">
+                  {{ staff.user.address }}<br>
+                  <ng-container *ngIf="staff.user.city || staff.user.state">
+                    {{ staff.user.city }}{{ staff.user.city && staff.user.state ? ', ' : '' }}{{ staff.user.state }}
+                  </ng-container>
+                  <div *ngIf="staff.user.postalCode">{{ staff.user.postalCode }}</div>
+                  <div *ngIf="staff.user.country">{{ staff.user.country }}</div>
+                </ng-container>
+                <span *ngIf="!staff.user.address">No address provided</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="staff-section">
+          <h2>Employment Details</h2>
+          <div class="employment-details">
+            <div class="detail-item">
+              <span class="detail-label">Department</span>
+              <span class="detail-value">{{ staff.department.name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Employment Type</span>
+              <span class="detail-value">
+                {{ staff.employmentType | titlecase | replace:'_':' ' }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Hire Date</span>
+              <span class="detail-value">{{ staff.hireDate | date:'longDate' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="staff.qualification">
+              <span class="detail-label">Qualifications</span>
+              <span class="detail-value">{{ staff.qualification }}</span>
+            </div>
+            <div class="detail-item" *ngIf="staff.emergencyContact">
+              <span class="detail-label">Emergency Contact</span>
+              <span class="detail-value">{{ staff.emergencyContact }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="staff-section" *ngIf="staff.salary">
+          <h2>Compensation</h2>
+          <div class="compensation-details">
+            <div class="detail-item">
+              <span class="detail-label">Salary</span>
+              <span class="detail-value">{{ staff.salary | currency }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

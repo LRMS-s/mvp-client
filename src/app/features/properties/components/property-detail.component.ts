@@ -11,7 +11,7 @@ import { UserType } from '../../../core/models/user.model';
   standalone: true,
   imports: [CommonModule, RouterModule, DatePipe],
   templateUrl: './property-detail.component.html',
-  styleUrl: './property-detail.component.scss'
+  styleUrl: './property-detail.component.scss',
 })
 export class PropertyDetailComponent implements OnInit {
   property: Property | null = null;
@@ -20,7 +20,7 @@ export class PropertyDetailComponent implements OnInit {
   activeImageUrl: string | null = null;
   isAdmin = false;
   isStaff = false;
-
+  objectKeys = Object.keys;
   constructor(
     private propertyService: PropertyService,
     private route: ActivatedRoute,
@@ -57,7 +57,7 @@ export class PropertyDetailComponent implements OnInit {
         console.error('Error loading property', err);
         this.error = true;
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -66,7 +66,10 @@ export class PropertyDetailComponent implements OnInit {
   }
 
   deleteProperty(): void {
-    if (!this.property || !confirm('Are you sure you want to delete this property?')) {
+    if (
+      !this.property ||
+      !confirm('Are you sure you want to delete this property?')
+    ) {
       return;
     }
 
@@ -77,7 +80,7 @@ export class PropertyDetailComponent implements OnInit {
       error: (err) => {
         console.error('Error deleting property', err);
         alert('Failed to delete property. Please try again.');
-      }
+      },
     });
   }
 }

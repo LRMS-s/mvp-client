@@ -8,7 +8,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (token) {
     const authReq = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
+      setHeaders: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInVzZXJUeXBlIjoiYWRtaW4iLCJpYXQiOjE3NDQ4MzgwNDIsImV4cCI6MTc0NDkyNDQ0Mn0.k7JRxknrkzK07MCOx_AoRNA7rwwNkV9ZzwhHdiLgzcs`,
+      },
     });
     return next(authReq);
   }

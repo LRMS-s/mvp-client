@@ -1,4 +1,14 @@
-            [ngClass]="{'is-invalid': propertyForm.get('description')?.touched && propertyForm.get('description')?.invalid}"
+  <div class="form-group">
+    <label for="propertyDescription">Description *</label>
+    <textarea
+    id="propertyDescription"
+    formControlName="description"
+    class="form-control"
+
+
+
+
+          [ngClass]="{'is-invalid': propertyForm.get('description')?.touched && propertyForm.get('description')?.invalid}"
           ></textarea>
           <div class="invalid-feedback" *ngIf="propertyForm.get('description')?.touched && propertyForm.get('description')?.errors">
             <span *ngIf="propertyForm.get('description')?.errors?.['required']">Description is required</span>
@@ -57,7 +67,6 @@
             </div>
           </div>
         </div>
-      </div>
 
       <!-- Pricing Section -->
       <div class="form-section">
@@ -300,11 +309,7 @@
               class="form-control"
               [ngClass]="{'is-invalid': propertyForm.get('constructionYear')?.touched && propertyForm.get('constructionYear')?.invalid}"
             >
-            <div class="invalid-feedback" *ngIf="propertyForm.get('constructionYear')?.touched && propertyForm.get('constructionYear')?.errors">
-              <span *ngIf="propertyForm.get('constructionYear')?.errors?.['min'] || propertyForm.get('constructionYear')?.errors?.['max']">
-                Construction year must be between 1800 and {{ new Date().getFullYear() }}
-              </span>
-            </div>
+
           </div>
 
           <div class="form-group">
@@ -315,11 +320,8 @@
               formControlName="parkingCapacity"
               class="form-control"
               min="0"
-              [ngClass]="{'is-invalid': propertyForm.get('parkingCapacity')?.touched && propertyForm.get('parkingCapacity')?.invalid}"
             >
-            <div class="invalid-feedback" *ngIf="propertyForm.get('parkingCapacity')?.touched && propertyForm.get('parkingCapacity')?.errors">
-              <span *ngIf="propertyForm.get('parkingCapacity')?.errors?.['min']">Parking capacity must be a non-negative number</span>
-            </div>
+
           </div>
         </div>
 
@@ -374,13 +376,9 @@
           <small class="form-text text-muted">Any additional information about the property</small>
         </div>
       </div>
-    </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary" [disabled]="submitting">
-        {{ submitting ? 'Saving...' : (isEditMode ? 'Update Property' : 'Add Property') }}
+      <button type="submit" class="btn-primary" >
       </button>
       <a routerLink="/properties" class="btn-link">Cancel</a>
     </div>
-  </form>
-</div>

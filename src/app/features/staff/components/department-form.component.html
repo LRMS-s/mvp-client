@@ -1,0 +1,118 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="flex items-center mb-6">
+    <a
+      routerLink="/staff/departments"
+      class="text-gray-500 hover:text-gray-700 mr-4"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+    </a>
+    <h1 class="text-2xl font-bold text-gray-800">
+      {{ isEditMode ? 'Edit Department' : 'Create New Department' }}
+    </h1>
+  </div>
+
+  <!-- Loading State -->
+  <div
+    *ngIf="loading"
+    class="flex justify-center items-center h-64"
+  >
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- Error Alert -->
+  <div
+    *ngIf="error"
+    class="bg-red-50 border-l-4 border-red-500 p-4 mb-4"
+  >
+    <p class="text-red-700">{{ error }}</p>
+  </div>
+
+  <!-- Department Form -->
+  <form
+    *ngIf="!loading"
+    [formGroup]="departmentForm"
+    (ngSubmit)="onSubmit()"
+    class="bg-white shadow-md rounded-lg p-6"
+  >
+    <div class="space-y-6">
+      <!-- Department Name -->
+      <div>
+        <label
+          for="name"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Department Name *
+        </label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [ngClass]="{
+            'border-red-500 focus:ring-red-500':
+              departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched
+          }"
+          placeholder="Enter department name"
+        >
+        <p
+          *ngIf="departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          {{ getFieldError('name') }}
+        </p>
+      </div>
+
+      <!-- Department Description -->
+      <div>
+        <label
+          for="description"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Description
+        </label>
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="4"
+          class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [ngClass]="{
+            'border-red-500 focus:ring-red-500':
+              departmentForm.get('description')?.invalid && departmentForm.get('description')?.touched
+          }"
+          placeholder="Enter department description (optional)"
+        ></textarea>
+        <p
+          *ngIf="departmentForm.get('description')?.invalid && departmentForm.get('description')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          {{ getFieldError('description') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex justify-end space-x-4 mt-6">
+      <button
+        type="button"
+        routerLink="/staff/departments"
+        class="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="departmentForm.invalid || submitting"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ submitting ? 'Saving...' : (isEditMode ? 'Update Department' : 'Create Department') }}
+      </button>
+    </div>
+  </form>
+</div>

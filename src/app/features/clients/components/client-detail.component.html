@@ -66,8 +66,8 @@
           <div *ngIf="!client.user.profileImageUrl"
             class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
             <span class="text-blue-800 font-medium text-xl">{{
-              client.user.firstName?.charAt(0) }}{{
-              client.user.lastName?.charAt(0) }}</span>
+              client.user.firstName.charAt(0) }}{{
+              client.user.lastName.charAt(0) }}</span>
           </div>
           <img *ngIf="client.user.profileImageUrl"
             class="h-16 w-16 rounded-full" [src]="client.user.profileImageUrl"

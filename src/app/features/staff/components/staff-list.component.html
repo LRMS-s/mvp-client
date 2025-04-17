@@ -1,0 +1,200 @@
+<div class="staff-container">
+  <div class="page-header">
+    <h1>Staff Members</h1>
+    <a *ngIf="isAdmin" routerLink="/staff/new" class="btn-primary">Add New Staff Member</a>
+  </div>
+
+  <div class="filters-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="search-field">
+        <input
+          type="text"
+          formControlName="searchTerm"
+          placeholder="Search staff members..."
+          class="form-control"
+        >
+      </div>
+
+      <div class="filter-fields">
+        <div class="filter-field">
+          <label for="departmentId">Department</label>
+          <select id="departmentId" formControlName="departmentId" class="form-control">
+            <option value="">All Departments</option>
+            <option *ngFor="let dept of departments" [value]="dept.id">
+              {{ dept.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="employmentType">Employment Type</label>
+          <select id="employmentType" formControlName="employmentType" class="form-control">
+            <option value="">All Types</option>
+            <option *ngFor="let type of employmentTypes" [value]="type">
+              {{ type | titlecase | replace:'_':' ' }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="isActive">Status</label>
+          <select id="isActive" formControlName="isActive" class="form-control">
+            <option value="">All Statuses</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="hiredFrom">Hired From</label>
+          <input
+            type="date"
+            id="hiredFrom"
+            formControlName="hiredFrom"
+            class="form-control"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="hiredTo">Hired To</label>
+          <input
+            type="date"
+            id="hiredTo"
+            formControlName="hiredTo"
+            class="form-control"
+          >
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="resetFilters()">
+          Reset Filters
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading staff members...</p>
+  </div>
+
+  <div *ngIf="!loading && filteredStaff.length === 0" class="empty-state">
+    <p>No staff members found matching your criteria.</p>
+  </div>
+
+  <div *ngIf="!loading && filteredStaff.length > 0" class="staff-list">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>Position</th>
+          <th>Employment Type</th>
+          <th>Hire Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let staffMember of paginatedStaff">
+          <td>
+            <div class="staff-profile">
+              <div *ngIf="!staffMember.user.profileImageUrl" class="profile-placeholder">
+                {{ staffMember.user.firstName[0] }}{{ staffMember.user.lastName[0] }}
+              </div>
+              <img
+                *ngIf="staffMember.user.profileImageUrl"
+                [src]="staffMember.user.profileImageUrl"
+                alt="Profile"
+                class="profile-image"
+              >
+              <div class="staff-name">
+                {{ staffMember.user.firstName }} {{ staffMember.user.lastName }}
+              </div>
+            </div>
+          </td>
+          <td>{{ staffMember.user.email }}</td>
+          <td>{{ staffMember.department.name }}</td>
+          <td>{{ staffMember.position }}</td>
+          <td>{{ staffMember.employmentType | titlecase | replace:'_':' ' }}</td>
+          <td>{{ staffMember.hireDate | date:'mediumDate' }}</td>
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="staffMember.isActive ? 'status-active' : 'status-inactive'"
+            >
+              {{ staffMember.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <a
+              [routerLink]="['/staff', staffMember.id]"
+              class="btn-view"
+            >
+              View
+            </a>
+            <a
+              *ngIf="isAdmin"
+              [routerLink]="['/staff', staffMember.id, 'edit']"
+              class="btn-edit"
+            >
+              Edit
+            </a>
+            <button
+              *ngIf="isAdmin"
+              (click)="toggleStaffStatus(staffMember)"
+              class="btn-toggle-status"
+              [ngClass]="staffMember.isActive ? 'btn-deactivate' : 'btn-activate'"
+            >
+              {{ staffMember.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+        {{ Math.min(currentPage * itemsPerPage, filteredStaff.length) }}
+        of {{ filteredStaff.length }} staff members
+      </div>
+
+      <div class="pagination-controls">
+        <button
+          (click)="changePage(1)"
+          [disabled]="currentPage === 1"
+        >
+          First
+        </button>
+        <button
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+        >
+          Previous
+        </button>
+
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1"
+        >
+          {{ i + 1 }}
+        </button>
+
+        <button
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+        >
+          Next
+        </button>
+        <button
+          (click)="changePage(totalPages)"
+          [disabled]="currentPage === totalPages"
+        >
+          Last
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

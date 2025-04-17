@@ -5,34 +5,42 @@ import { UserType } from '../../core/models/user.model';
 export const RESERVATIONS_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./components/reservation-list.component')
-      .then(c => c.ReservationListComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./components/reservation-list.component').then(
+        (c) => c.ReservationListComponent
+      ),
+    canActivate: [authGuard],
   },
-  {
-    path: 'new',
-    loadComponent: () => import('./components/reservation-form.component')
-      .then(c => c.ReservationFormComponent),
-    canActivate: [authGuard]
-  },
+  // {
+  //   path: 'new',
+  //   loadComponent: () =>
+  //     import('./components/reservation-form.component').then(
+  //       (c) => c.ReservationFormComponent
+  //     ),
+  //   canActivate: [authGuard],
+  // },
   {
     path: 'calendar',
-    loadComponent: () => import('./components/calendar-view.component')
-      .then(c => c.CalendarViewComponent),
+    loadComponent: () =>
+      import('./components/calendar-view.component').then(
+        (c) => c.CalendarViewComponent
+      ),
     canActivate: [authGuard],
-    data: { roles: [UserType.ADMIN, UserType.STAFF] }
+    data: { roles: [UserType.ADMIN, UserType.STAFF] },
   },
   {
     path: ':id',
-    loadComponent: () => import('./components/reservation-detail.component')
-      .then(c => c.ReservationDetailComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: ':id/edit',
-    loadComponent: () => import('./components/reservation-form.component')
-      .then(c => c.ReservationFormComponent),
+    loadComponent: () =>
+      import('./components/reservation-detail.component').then(
+        (c) => c.ReservationDetailComponent
+      ),
     canActivate: [authGuard],
-    data: { roles: [UserType.ADMIN, UserType.STAFF] }
-  }
+  },
+  // {
+  //   path: ':id/edit',
+  //   loadComponent: () => import('./components/reservation-form.component')
+  //     .then(c => c.ReservationFormComponent),
+  //   canActivate: [authGuard],
+  //   data: { roles: [UserType.ADMIN, UserType.STAFF] }
+  // }
 ];

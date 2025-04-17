@@ -8,7 +8,7 @@ import { DashboardService } from './services/dashboard.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
   stats: any = {};
@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.loadDashboardData();
+    // this.loadDashboardData();
   }
 
   loadDashboardData(): void {
@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
         console.error('Error loading dashboard data', err);
         this.error = true;
         this.loading = false;
-      }
+      },
     });
   }
 }

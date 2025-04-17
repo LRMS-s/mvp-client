@@ -2,15 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from '../../core/auth/guards/auth.guard';
 import { UserType } from '../../core/models/user.model';
 
-const CLIENTS_ROUTES: Routes = [
-  {
-    path: 'profile',
-    loadComponent: () =>
-      import('./components/client-profile.component').then(
-        (c) => c.ClientProfileComponent
-      ),
-    canActivate: [authGuard],
-  },
+export const CLIENTS_ROUTES: Routes = [
   {
     path: ':id',
     loadComponent: () =>

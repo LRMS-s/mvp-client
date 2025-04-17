@@ -1,0 +1,205 @@
+<div class="reservations-container">
+  <div class="page-header">
+    <h1>Reservations</h1>
+    <a routerLink="/reservations/new" class="btn-primary">Create New Reservation</a>
+  </div>
+
+  <div class="filters-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="search-field">
+        <input
+          type="text"
+          formControlName="searchTerm"
+          placeholder="Search reservations..."
+          class="form-control"
+        >
+      </div>
+
+      <div class="filter-fields">
+        <div class="filter-field">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status" class="form-control">
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of reservationStatuses" [value]="status">
+              {{ status | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="paymentStatus">Payment Status</label>
+          <select id="paymentStatus" formControlName="paymentStatus" class="form-control">
+            <option value="">All Payment Statuses</option>
+            <option *ngFor="let status of paymentStatuses" [value]="status">
+              {{ status | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="startDateFrom">Start Date From</label>
+          <input
+            type="date"
+            id="startDateFrom"
+            formControlName="startDateFrom"
+            class="form-control"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="startDateTo">Start Date To</label>
+          <input
+            type="date"
+            id="startDateTo"
+            formControlName="startDateTo"
+            class="form-control"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="minAmount">Min Amount</label>
+          <input
+            type="number"
+            id="minAmount"
+            formControlName="minAmount"
+            class="form-control"
+            min="0"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="maxAmount">Max Amount</label>
+          <input
+            type="number"
+            id="maxAmount"
+            formControlName="maxAmount"
+            class="form-control"
+            min="0"
+          >
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="resetFilters()">
+          Reset Filters
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <p>Loading reservations...</p>
+  </div>
+
+  <div *ngIf="!loading && filteredReservations.length === 0" class="empty-state">
+    <p>No reservations found matching your criteria.</p>
+  </div>
+
+  <div *ngIf="!loading && filteredReservations.length > 0" class="reservation-list">
+    <table>
+      <thead>
+        <tr>
+          <th>Reservation #</th>
+          <th>Client</th>
+          <th>Item</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Payment Status</th>
+          <th>Total Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reservation of paginatedReservations">
+          <td>{{ reservation.reservationNumber }}</td>
+          <td>
+            {{ reservation.client.user.firstName }} {{ reservation.client.user.lastName }}
+          </td>
+          <td>
+            {{ reservation.itemType === 'property'
+              ? reservation.property?.name
+              : reservation.vehicle?.name }}
+          </td>
+          <td>{{ reservation.startDate | date:'shortDate' }}</td>
+          <td>{{ reservation.endDate | date:'shortDate' }}</td>
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="'status-' + reservation.status"
+            >
+              {{ reservation.status | titlecase }}
+            </span>
+          </td>
+          <td>
+            <span
+              class="payment-badge"
+              [ngClass]="'payment-' + reservation.paymentStatus"
+            >
+              {{ reservation.paymentStatus | titlecase }}
+            </span>
+          </td>
+          <td>{{ reservation.totalAmount | currency }}</td>
+          <td class="actions">
+            <a
+              [routerLink]="['/reservations', reservation.id]"
+              class="btn-view"
+            >
+              View
+            </a>
+            <a
+              *ngIf="isAdmin || isStaff"
+              [routerLink]="['/reservations', reservation.id, 'edit']"
+              class="btn-edit"
+            >
+              Edit
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+        {{ Math.min(currentPage * itemsPerPage, filteredReservations.length) }}
+        of {{ filteredReservations.length }} reservations
+      </div>
+
+      <div class="pagination-controls">
+        <button
+          (click)="changePage(1)"
+          [disabled]="currentPage === 1"
+        >
+          First
+        </button>
+        <button
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+        >
+          Previous
+        </button>
+
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1"
+        >
+          {{ i + 1 }}
+        </button>
+
+        <button
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+        >
+          Next
+        </button>
+        <button
+          (click)="changePage(totalPages)"
+          [disabled]="currentPage === totalPages"
+        >
+          Last
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
