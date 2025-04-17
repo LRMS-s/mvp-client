@@ -77,7 +77,7 @@ export class CalendarViewComponent implements OnInit {
     const lastDay = this.calendarDays[this.calendarDays.length - 1].date;
 
     this.reservationService
-      .getReservationsInDateRange(firstDay, lastDay)
+      .getReservationsInDateRange(firstDay.toISOString(), lastDay.toISOString())
       .subscribe({
         next: (reservations) => {
           this.mapReservationsToCalendar(reservations);

@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { Property, CreatePropertyRequest } from '../../../core/models/property.model';
+import {
+  Property,
+  CreatePropertyRequest,
+} from '../../../core/models/property.model';
+import { AdditionalService } from '../../../core/models/additional-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PropertyService {
   private readonly endpoint = 'properties';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getProperties(params: any = {}): Observable<Property[]> {
     return this.apiService.get<Property[]>(this.endpoint, params);
@@ -23,7 +27,10 @@ export class PropertyService {
     return this.apiService.post<Property>(this.endpoint, property);
   }
 
-  updateProperty(id: number, property: Partial<CreatePropertyRequest>): Observable<Property> {
+  updateProperty(
+    id: number,
+    property: Partial<CreatePropertyRequest>
+  ): Observable<Property> {
     return this.apiService.patch<Property>(`${this.endpoint}/${id}`, property);
   }
 
@@ -40,7 +47,9 @@ export class PropertyService {
   }
 
   searchProperties(query: string): Observable<Property[]> {
-    return this.apiService.get<Property[]>(`${this.endpoint}/search`, { q: query });
+    return this.apiService.get<Property[]>(`${this.endpoint}/search`, {
+      q: query,
+    });
   }
 
   getPropertiesByType(type: string): Observable<Property[]> {
@@ -48,15 +57,28 @@ export class PropertyService {
   }
 
   getPropertiesByLocation(location: string): Observable<Property[]> {
-    return this.apiService.get<Property[]>(`${this.endpoint}/location/${location}`);
+    return this.apiService.get<Property[]>(
+      `${this.endpoint}/location/${location}`
+    );
   }
 
-  getAvailableProperties(startDate: string, endDate: string, params: any = {}): Observable<Property[]> {
+  getPropertyAdditionalServices(
+    propertyId: number
+  ): Observable<AdditionalService[]> {
+    return this.apiService.get<AdditionalService[]>(
+      `${this.endpoint}/${propertyId}/additional-services`
+    );
+  }
+  getAvailableProperties(
+    startDate: string,
+    endDate: string,
+    params: any = {}
+  ): Observable<Property[]> {
     return this.apiService.get<Property[]>(`rental-items/available`, {
       itemType: 'property',
       startDate,
       endDate,
-      ...params
+      ...params,
     });
   }
 }

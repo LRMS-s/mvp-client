@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { Vehicle, CreateVehicleRequest } from '../../../core/models/vehicle.model';
+import {
+  Vehicle,
+  CreateVehicleRequest,
+} from '../../../core/models/vehicle.model';
+import { AdditionalService } from '../../../core/models/additional-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VehicleService {
   private readonly endpoint = 'vehicles';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getVehicles(params: any = {}): Observable<Vehicle[]> {
     return this.apiService.get<Vehicle[]>(this.endpoint, params);
@@ -23,7 +27,10 @@ export class VehicleService {
     return this.apiService.post<Vehicle>(this.endpoint, vehicle);
   }
 
-  updateVehicle(id: number, vehicle: Partial<CreateVehicleRequest>): Observable<Vehicle> {
+  updateVehicle(
+    id: number,
+    vehicle: Partial<CreateVehicleRequest>
+  ): Observable<Vehicle> {
     return this.apiService.patch<Vehicle>(`${this.endpoint}/${id}`, vehicle);
   }
 
@@ -36,7 +43,9 @@ export class VehicleService {
   }
 
   searchVehicles(query: string): Observable<Vehicle[]> {
-    return this.apiService.get<Vehicle[]>(`${this.endpoint}/search`, { q: query });
+    return this.apiService.get<Vehicle[]>(`${this.endpoint}/search`, {
+      q: query,
+    });
   }
 
   getVehiclesByType(type: string): Observable<Vehicle[]> {
@@ -48,19 +57,40 @@ export class VehicleService {
     if (model) {
       params.model = model;
     }
-    return this.apiService.get<Vehicle[]>(`${this.endpoint}/make-model`, params);
+    return this.apiService.get<Vehicle[]>(
+      `${this.endpoint}/make-model`,
+      params
+    );
   }
 
-  getVehiclesByYearRange(minYear: number, maxYear: number): Observable<Vehicle[]> {
-    return this.apiService.get<Vehicle[]>(`${this.endpoint}/year-range`, { minYear, maxYear });
+  getVehiclesByYearRange(
+    minYear: number,
+    maxYear: number
+  ): Observable<Vehicle[]> {
+    return this.apiService.get<Vehicle[]>(`${this.endpoint}/year-range`, {
+      minYear,
+      maxYear,
+    });
   }
 
-  getAvailableVehicles(startDate: string, endDate: string, params: any = {}): Observable<Vehicle[]> {
+  getAvailableVehicles(
+    startDate: string,
+    endDate: string,
+    params: any = {}
+  ): Observable<Vehicle[]> {
     return this.apiService.get<Vehicle[]>(`rental-items/available`, {
       itemType: 'vehicle',
       startDate,
       endDate,
-      ...params
+      ...params,
     });
+  }
+
+  getVehicleAdditionalServices(
+    vehicleId: number
+  ): Observable<AdditionalService[]> {
+    return this.apiService.get<AdditionalService[]>(
+      `${this.endpoint}/${vehicleId}/additional-services`
+    );
   }
 }
