@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { User, UserType } from '../../core/models/user.model';
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
@@ -10,7 +10,7 @@ import { ClickOutsideDirective } from '../../shared/directives/click-outside.dir
   standalone: true,
   imports: [CommonModule, RouterModule, ClickOutsideDirective],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   currentUser: User | null = null;
@@ -20,10 +20,13 @@ export class NavbarComponent implements OnInit {
   showUserMenu = false;
   showMobileMenu = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
+    this.router.events.subscribe((params) => {
+      this.showMobileMenu = false;
+    });
+    this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       this.isAdmin = user?.userType === UserType.ADMIN;
       this.isStaff = user?.userType === UserType.STAFF;
