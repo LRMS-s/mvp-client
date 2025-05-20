@@ -176,6 +176,13 @@
         </button>
       </div>
 
+      <!-- Availability Check Result -->
+      <div class="form-section" *ngIf="availabilityResult">
+        <app-availability-check-result
+          [result]="availabilityResult"
+        ></app-availability-check-result>
+      </div>
+
       <div
         class="form-section"
         *ngIf="

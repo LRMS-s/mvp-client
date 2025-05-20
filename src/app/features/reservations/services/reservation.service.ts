@@ -148,7 +148,7 @@ export class ReservationService {
     endDate: string,
     itemType?: RentalItemType,
     itemId?: number
-  ): Observable<any[]> {
+  ): Observable<any> {
     const params: {
       itemType?: RentalItemType;
       itemId?: number;
@@ -173,7 +173,7 @@ export class ReservationService {
     return this.apiService
       .post<any[]>(`${this.availabilityEndpoint}/check`, params)
       .pipe(
-        map((items: any[]) => {
+        map((items: any) => {
           console.log(items);
 
           return items;

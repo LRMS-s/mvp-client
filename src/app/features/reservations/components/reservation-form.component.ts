@@ -21,6 +21,41 @@ import {
   RentalItemType,
 } from '../../../core/models/rental-item.model';
 import { RentalItemCardComponent } from '../../../shared/components/rental-item-card/rental-item-card.component';
+import { AvailabilityCheckResultComponent } from './availability-check-result.component';
+
+interface AvailabilityCheckResult {
+  available: boolean;
+  item: any;
+  requestedDates: {
+    start: string;
+    end: string;
+  };
+  conflicts: Array<{
+    id: number;
+    reservationNumber: string;
+    status: string;
+    paymentStatus: string;
+    startDate: string;
+    endDate: string;
+    totalAmount: string;
+    paidAmount: string;
+    notes: string;
+    itemType: string;
+    propertyId: number | null;
+    vehicleId: number | null;
+    clientId: number;
+    createdAt: string;
+    updatedAt: string;
+    additionalServices: string;
+    guestInformation: any;
+  }>;
+  nextAvailableDate: string;
+  alternativeDateRanges: Array<{
+    start: string;
+    end: string;
+  }>;
+  prediction: string;
+}
 
 @Component({
   selector: 'app-reservation-form',
@@ -30,6 +65,7 @@ import { RentalItemCardComponent } from '../../../shared/components/rental-item-
     RouterModule,
     ReactiveFormsModule,
     RentalItemCardComponent,
+    AvailabilityCheckResultComponent,
   ],
   templateUrl: './reservation-form.component.html',
   styleUrl: './reservation-form.component.scss',
@@ -45,6 +81,7 @@ export class ReservationFormComponent implements OnInit {
   additionalServicesKeys: string[] = [];
   availableRentalItems: any[] = [];
   selectedItem: Partial<RentalItem> = {};
+  availabilityResult: AvailabilityCheckResult | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -266,16 +303,12 @@ export class ReservationFormComponent implements OnInit {
         itemId
       )
       .subscribe({
-        next: (available) => {
+        next: (result: AvailabilityCheckResult) => {
           this.isLoading = false;
-          if (available) {
-            // this.notificationService.success(
-            //   'The selected item is available for these dates!'
-            // );
-            console.log(this.availableRentalItems.length);
-          } else {
-            this.notificationService.error(
-              'The selected item is not available for these dates. Please choose different dates.'
+          this.availabilityResult = result;
+          if (result.available) {
+            this.notificationService.success(
+              'The selected item is available for these dates!'
             );
           }
         },
