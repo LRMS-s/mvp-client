@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../services/property.service';
@@ -13,7 +13,7 @@ import { UserType } from '../../../core/models/user.model';
   templateUrl: './property-detail.component.html',
   styleUrl: './property-detail.component.scss',
 })
-export class PropertyDetailComponent implements OnInit {
+export class PropertyDetailComponent implements OnInit, OnDestroy {
   property: Property | null = null;
   loading = true;
   error = false;
@@ -44,6 +44,7 @@ export class PropertyDetailComponent implements OnInit {
       this.isStaff = currentUser.userType === UserType.STAFF;
     }
   }
+  ngOnDestroy(): void {}
 
   loadProperty(id: number): void {
     this.loading = true;

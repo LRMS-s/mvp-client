@@ -36,6 +36,7 @@ export const RESERVATIONS_ROUTES: Routes = [
       ),
     canActivate: [authGuard],
   },
+
   // {
   //   path: ':id/edit',
   //   loadComponent: () => import('./components/reservation-form.component')

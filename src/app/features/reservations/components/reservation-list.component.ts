@@ -175,4 +175,16 @@ export class ReservationListComponent implements OnInit {
       this.currentPage = page;
     }
   }
+  deleteReservation(reservationId: number): void {
+    if (confirm('Are you sure you want to delete this reservation?')) {
+      this.reservationService.deleteReservation(reservationId).subscribe({
+        next: () => {
+          this.loadReservations();
+        },
+        error: (error) => {
+          console.error('Error deleting reservation', error);
+        },
+      });
+    }
+  }
 }

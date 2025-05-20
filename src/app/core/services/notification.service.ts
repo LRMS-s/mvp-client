@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, Observable } from 'rxjs';
 
 export enum NotificationType {
   SUCCESS = 'success',
   ERROR = 'error',
   INFO = 'info',
-  WARNING = 'warning'
+  WARNING = 'warning',
 }
 
 export interface Notification {
@@ -16,12 +17,14 @@ export interface Notification {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-  private notificationSubject: Subject<Notification> = new Subject<Notification>();
-  public notifications$: Observable<Notification> = this.notificationSubject.asObservable();
-
+  private notificationSubject: Subject<Notification> =
+    new Subject<Notification>();
+  public notifications$: Observable<Notification> =
+    this.notificationSubject.asObservable();
+  constructor(private toastr: ToastrService) {}
   success(message: string, timeout: number = 5000): void {
     this.show(NotificationType.SUCCESS, message, timeout);
   }
@@ -38,9 +41,16 @@ export class NotificationService {
     this.show(NotificationType.WARNING, message, timeout);
   }
 
-  private show(type: NotificationType, message: string, timeout?: number): void {
+  private show(
+    type: NotificationType,
+    message: string,
+    timeout?: number
+  ): void {
     const id = this.generateId();
     this.notificationSubject.next({ id, type, message, timeout });
+    this.toastr[type](message, '', {
+      timeOut: 1000,
+    });
   }
 
   private generateId(): string {

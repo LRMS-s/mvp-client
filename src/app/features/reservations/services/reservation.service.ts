@@ -7,7 +7,10 @@ import {
   ReservationStatus,
   PaymentStatus,
 } from '../../../core/models/reservation.model';
-import { RentalItem } from '../../../core/models/rental-item.model';
+import {
+  RentalItem,
+  RentalItemType,
+} from '../../../core/models/rental-item.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +18,10 @@ import { RentalItem } from '../../../core/models/rental-item.model';
 export class ReservationService {
   private readonly endpoint = 'reservations';
   private readonly availabilityEndpoint = 'availability';
+  reservationDates = {
+    startDate: '',
+    endDate: '',
+  };
   constructor(private apiService: ApiService) {}
 
   getReservations(params: any = {}): Observable<Reservation[]> {
@@ -136,15 +143,22 @@ export class ReservationService {
       endDate,
     });
   }
-  getAvailableItems(
+  checkAvailability(
     startDate: string,
     endDate: string,
-    itemType?: string,
+    itemType?: RentalItemType,
     itemId?: number
   ): Observable<any[]> {
-    const params: any = {
+    const params: {
+      itemType?: RentalItemType;
+      itemId?: number;
+      startDate: string;
+      endDate: string;
+    } = {
       startDate: startDate,
       endDate: endDate,
+      itemType: itemType,
+      itemId,
     };
 
     if (itemType) {
@@ -154,9 +168,10 @@ export class ReservationService {
     if (itemId) {
       params.itemId = itemId;
     }
+    console.log('params', params);
 
     return this.apiService
-      .get<any[]>(`${this.availabilityEndpoint}/items`, params)
+      .post<any[]>(`${this.availabilityEndpoint}/check`, params)
       .pipe(
         map((items: any[]) => {
           console.log(items);
@@ -165,7 +180,34 @@ export class ReservationService {
         })
       );
   }
+  findAvailableItems(
+    startDate: string,
+    endDate: string,
+    itemType?: RentalItemType
+  ): Observable<RentalItem[]> {
+    const params: {
+      itemType?: RentalItemType;
+      startDate: string;
+      endDate: string;
+    } = {
+      startDate: startDate,
+      endDate: endDate,
+    };
 
+    if (itemType) {
+      params.itemType = itemType;
+    }
+
+    return this.apiService
+      .get<RentalItem[]>(`${this.availabilityEndpoint}/items`, params)
+      .pipe(
+        map((items: RentalItem[]) => {
+          console.log(items);
+
+          return items;
+        })
+      );
+  }
   getUpcomingReservations(days: number = 7): Observable<Reservation[]> {
     return this.apiService.get<Reservation[]>(`${this.endpoint}/upcoming`, {
       days,

@@ -13,6 +13,7 @@ import {
 import { RentalItemStatus } from '../../../core/models/rental-item.model';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 import { ReplacePipe } from '../../../shared/pipes/replace.pipe';
+import { RentalItemCardComponent } from '../../../shared/components/rental-item-card/rental-item-card.component';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -24,6 +25,7 @@ import { ReplacePipe } from '../../../shared/pipes/replace.pipe';
     DatePipe,
     SearchBarComponent,
     ReplacePipe,
+    RentalItemCardComponent,
   ],
   templateUrl: './vehicle-list.component.html',
   styleUrl: './vehicle-list.component.scss',

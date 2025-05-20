@@ -1,0 +1,83 @@
+<div class="rental-item-card">
+  <div class="rental-item-img">
+    <img
+      [src]="rentalItem.mainImageUrl || '/assets/images/placeholder.jpg'"
+      [alt]="rentalItem.name"
+    />
+    <div class="rental-item-badge" [ngClass]="'status-' + rentalItem.status">
+      {{ rentalItem.status }}
+    </div>
+  </div>
+
+  <div class="rental-item-content">
+    <h2 class="rental-item-title">{{ rentalItem.name }}</h2>
+
+    <!-- Vehicle-specific details -->
+    <ng-container *ngIf="isVehicle">
+      <p class="vehicle-make">
+        {{ asVehicle.make }} {{ asVehicle.model }} ({{ asVehicle.year }})
+      </p>
+      <div class="vehicle-features">
+        <span class="feature">
+          <i class="feature-icon transmission-icon"></i>
+          {{ asVehicle.transmissionType | titlecase | replace : "_" : " " }}
+        </span>
+        <span class="feature">
+          <i class="feature-icon fuel-icon"></i>
+          {{ asVehicle.fuelType | titlecase }}
+        </span>
+        <span class="feature">
+          <i class="feature-icon seats-icon"></i>
+          {{ asVehicle.seatingCapacity }} Seats
+        </span>
+      </div>
+    </ng-container>
+
+    <!-- Property-specific details -->
+    <ng-container *ngIf="isProperty">
+      <p class="property-type">
+        {{ asProperty.propertyType | titlecase | replace : "_" : " " }}
+      </p>
+      <div class="property-features">
+        <span class="feature">
+          <i class="feature-icon bedroom-icon"></i>
+          {{ asProperty.numberOfBedrooms }} Bedrooms
+        </span>
+        <span class="feature">
+          <i class="feature-icon bathroom-icon"></i>
+          {{ asProperty.numberOfBathrooms }} Bathrooms
+        </span>
+        <span class="feature">
+          <i class="feature-icon area-icon"></i>
+          {{ asProperty.totalArea }} sqm
+        </span>
+      </div>
+    </ng-container>
+
+    <div class="rental-item-footer">
+      <div class="rental-item-price">
+        {{ rentalItem.baseRate | currency }} / day
+      </div>
+      <div class="flex flex-grow flex-row">
+        <a
+          [routerLink]="[
+            isVehicle ? '/vehicles' : '/properties',
+            rentalItem.id
+          ]"
+          class="btn-view"
+          >View Details</a
+        >
+        <a
+          [routerLink]="['/reservations/new']"
+          [queryParams]="{
+            rentalItemId: rentalItem.id,
+            itemType: isVehicle ? 'vehicle' : 'property'
+          }"
+          [queryParamsHandling]="'merge'"
+          class="btn-view"
+          >Make Reservation</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

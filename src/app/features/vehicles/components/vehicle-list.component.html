@@ -17,20 +17,28 @@
       <div class="filter-fields">
         <div class="filter-field">
           <label for="vehicleType">Vehicle Type</label>
-          <select id="vehicleType" formControlName="vehicleType" class="form-control">
+          <select
+            id="vehicleType"
+            formControlName="vehicleType"
+            class="form-control"
+          >
             <option value="">All Types</option>
             <option *ngFor="let type of vehicleTypes" [value]="type">
-              {{ type | titlecase | replace:'_':' ' }}
+              {{ type | titlecase | replace : "_" : " " }}
             </option>
           </select>
         </div>
 
         <div class="filter-field">
           <label for="transmissionType">Transmission</label>
-          <select id="transmissionType" formControlName="transmissionType" class="form-control">
+          <select
+            id="transmissionType"
+            formControlName="transmissionType"
+            class="form-control"
+          >
             <option value="">All Transmissions</option>
             <option *ngFor="let type of transmissionTypes" [value]="type">
-              {{ type | titlecase | replace:'_':' ' }}
+              {{ type | titlecase | replace : "_" : " " }}
             </option>
           </select>
         </div>
@@ -63,7 +71,7 @@
             formControlName="minYear"
             min="1990"
             class="form-control"
-          >
+          />
         </div>
 
         <div class="filter-field">
@@ -74,10 +82,12 @@
             formControlName="maxPrice"
             min="0"
             class="form-control"
-          >
+          />
         </div>
 
-        <button type="button" class="btn-secondary" (click)="resetFilters()">Reset</button>
+        <button type="button" class="btn-secondary" (click)="resetFilters()">
+          Reset
+        </button>
       </div>
     </form>
   </div>
@@ -92,6 +102,9 @@
 
   <div *ngIf="!loading && filteredVehicles.length > 0" class="vehicle-grid">
     <div *ngFor="let vehicle of paginatedVehicles" class="vehicle-card">
+      <app-rental-item-card [rentalItem]="vehicle"></app-rental-item-card>
+    </div>
+    <!-- <div *ngFor="let vehicle of paginatedVehicles" class="vehicle-card">
       <div class="vehicle-img">
         <img [src]="vehicle.mainImageUrl || '/assets/images/vehicle-placeholder.jpg'" [alt]="vehicle.name">
         <div class="vehicle-badge" [ngClass]="'status-' + vehicle.status">
@@ -125,7 +138,7 @@
           <a [routerLink]="['/vehicles', vehicle.id]" class="btn-view">View Details</a>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Pagination -->
@@ -137,10 +150,7 @@
     </div>
 
     <div class="pagination-controls">
-      <button
-        (click)="changePage(1)"
-        [disabled]="currentPage === 1"
-      >
+      <button (click)="changePage(1)" [disabled]="currentPage === 1">
         First
       </button>
       <button

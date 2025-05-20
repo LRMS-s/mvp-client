@@ -4,8 +4,13 @@
   </div>
 
   <div *ngIf="error" class="error-state">
-    <p>Error loading property details. The property might not exist or has been removed.</p>
-    <button routerLink="/properties" class="btn-primary">Back to Properties</button>
+    <p>
+      Error loading property details. The property might not exist or has been
+      removed.
+    </p>
+    <button routerLink="/properties" class="btn-primary">
+      Back to Properties
+    </button>
   </div>
 
   <div *ngIf="!loading && !error && property" class="property-detail">
@@ -18,23 +23,37 @@
         </div>
       </div>
       <div class="header-actions" *ngIf="isAdmin || isStaff">
-        <a [routerLink]="['/properties', property.id, 'edit']" class="btn-edit">Edit</a>
-        <button class="btn-delete" *ngIf="isAdmin" (click)="deleteProperty()">Delete</button>
+        <a [routerLink]="['/properties', property.id, 'edit']" class="btn-edit"
+          >Edit</a
+        >
+        <button class="btn-delete" *ngIf="isAdmin" (click)="deleteProperty()">
+          Delete
+        </button>
       </div>
     </div>
 
     <div class="property-gallery">
       <div class="main-image">
-        <img [src]="activeImageUrl || property.mainImageUrl || '/assets/images/property-placeholder.jpg'" [alt]="property.name">
+        <img
+          [src]="
+            activeImageUrl ||
+            property.mainImageUrl ||
+            '/assets/images/property-placeholder.jpg'
+          "
+          [alt]="property.name"
+        />
       </div>
-      <div class="thumbnail-container" *ngIf="property.imageUrls && property.imageUrls.length > 0">
+      <div
+        class="thumbnail-container"
+        *ngIf="property.imageUrls && property.imageUrls.length > 0"
+      >
         <div
           *ngFor="let imageUrl of property.imageUrls"
           class="thumbnail"
           [class.active]="activeImageUrl === imageUrl"
           (click)="setActiveImage(imageUrl)"
         >
-          <img [src]="imageUrl" alt="Property thumbnail">
+          <img [src]="imageUrl" alt="Property thumbnail" />
         </div>
       </div>
     </div>
@@ -51,11 +70,15 @@
           <div class="property-features-grid">
             <div class="feature-item">
               <span class="feature-label">Type</span>
-              <span class="feature-value">{{ property.propertyType | titlecase }}</span>
+              <span class="feature-value">{{
+                property.propertyType | titlecase
+              }}</span>
             </div>
             <div class="feature-item">
               <span class="feature-label">Location</span>
-              <span class="feature-value">{{ property.locationType.replace('_', ' ') | titlecase }}</span>
+              <span class="feature-value">{{
+                property.locationType.replace("_", " ") | titlecase
+              }}</span>
             </div>
             <div class="feature-item">
               <span class="feature-label">Total Area</span>
@@ -67,19 +90,27 @@
             </div>
             <div class="feature-item">
               <span class="feature-label">Bathrooms</span>
-              <span class="feature-value">{{ property.numberOfBathrooms }}</span>
+              <span class="feature-value">{{
+                property.numberOfBathrooms
+              }}</span>
             </div>
             <div class="feature-item">
               <span class="feature-label">Floors</span>
-              <span class="feature-value">{{ property.numberOfFloors || 'N/A' }}</span>
+              <span class="feature-value">{{
+                property.numberOfFloors || "N/A"
+              }}</span>
             </div>
             <div class="feature-item">
               <span class="feature-label">Construction Year</span>
-              <span class="feature-value">{{ property.constructionYear || 'N/A' }}</span>
+              <span class="feature-value">{{
+                property.constructionYear || "N/A"
+              }}</span>
             </div>
             <div class="feature-item">
               <span class="feature-label">Parking</span>
-              <span class="feature-value">{{ property.parkingCapacity || 'None' }}</span>
+              <span class="feature-value">{{
+                property.parkingCapacity || "None"
+              }}</span>
             </div>
           </div>
         </div>
@@ -87,20 +118,39 @@
         <div class="property-section">
           <h2>Amenities</h2>
           <div class="amenities-list" *ngIf="property.amenities">
-            <div *ngFor="let item of property.amenities | keyvalue" class="amenity-item" [class.available]="item.value">
+            <div
+              *ngFor="let item of property.amenities | keyvalue"
+              class="amenity-item"
+              [class.available]="item.value"
+            >
               <span class="amenity-icon" [class.checked]="item.value">✓</span>
               <span class="amenity-name">{{ item.key | titlecase }}</span>
             </div>
           </div>
-          <div *ngIf="!property.amenities || objectKeys(property.amenities).length === 0" class="no-data">
+          <div
+            *ngIf="
+              !property.amenities || objectKeys(property.amenities).length === 0
+            "
+            class="no-data"
+          >
             No amenities listed for this property.
           </div>
         </div>
 
-        <div class="property-section" *ngIf="property.hasPool || property.hasGarden || property.hasSpa || property.hasGym">
+        <div
+          class="property-section"
+          *ngIf="
+            property.hasPool ||
+            property.hasGarden ||
+            property.hasSpa ||
+            property.hasGym
+          "
+        >
           <h2>Special Features</h2>
           <div class="special-features">
-            <div class="feature-badge" *ngIf="property.hasPool">Swimming Pool</div>
+            <div class="feature-badge" *ngIf="property.hasPool">
+              Swimming Pool
+            </div>
             <div class="feature-badge" *ngIf="property.hasGarden">Garden</div>
             <div class="feature-badge" *ngIf="property.hasSpa">Spa</div>
             <div class="feature-badge" *ngIf="property.hasGym">Gym</div>
@@ -116,26 +166,36 @@
       <div class="property-sidebar">
         <div class="price-card">
           <h3>Pricing</h3>
-          <div class="price-value">{{ property.baseRate | currency }} <span class="price-period">per night</span></div>
+          <div class="price-value">
+            {{ property.baseRate | currency }}
+            <span class="price-period">per night</span>
+          </div>
           <div class="price-detail" *ngIf="property.securityDeposit">
             Security Deposit: {{ property.securityDeposit | currency }}
           </div>
-          <a routerLink="/reservations/new" [queryParams]="{propertyId: property.id}" class="btn-reserve">Make Reservation</a>
+          <a
+            routerLink="/reservations/new"
+            [queryParams]="{ propertyId: property.id }"
+            class="btn-reserve"
+            >Make Reservation</a
+          >
         </div>
 
         <div class="location-card">
           <h3>Location</h3>
           <p class="address">
-            {{ property.addressLine1 }}<br *ngIf="property.addressLine1">
-            {{ property.addressLine2 }}<br *ngIf="property.addressLine2">
-            {{ property.city }}{{ property.city && property.state ? ', ' : '' }}{{ property.state }}<br *ngIf="property.city || property.state">
+            {{ property.addressLine1 }}<br *ngIf="property.addressLine1" />
+            {{ property.addressLine2 }}<br *ngIf="property.addressLine2" />
+            {{ property.city }}{{ property.city && property.state ? ", " : ""
+            }}{{ property.state }}<br *ngIf="property.city || property.state" />
             {{ property.postalCode }} {{ property.country }}
           </p>
-          <div class="map-container" *ngIf="property.latitude && property.longitude">
-            <!-- Placeholder for map - in a real application, you would integrate with a mapping API -->
-            <div class="map-placeholder">
-              Map would be displayed here
-            </div>
+          <div
+            class="map-container"
+            *ngIf="property.latitude && property.longitude"
+          >
+            <div id="map"></div>
+            <div class="map-placeholder">Map would be displayed here</div>
           </div>
         </div>
       </div>

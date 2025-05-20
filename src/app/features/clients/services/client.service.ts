@@ -7,12 +7,12 @@ import { Client, CreateClientRequest } from '../../../core/models/client.model';
   providedIn: 'root',
 })
 export class ClientService {
-  private readonly endpoint = 'users';
+  private readonly endpoint = 'clients';
 
   constructor(private apiService: ApiService) {}
 
   getClients(): Observable<Client[]> {
-    return this.apiService.get<Client[]>(`${this.endpoint}/clients`);
+    return this.apiService.get<Client[]>(`${this.endpoint}`);
   }
 
   getClient(id: number): Observable<Client> {
@@ -20,7 +20,7 @@ export class ClientService {
   }
 
   getClientByUserId(userId: number): Observable<Client> {
-    return this.apiService.get<Client>(`${this.endpoint}/users/${userId}`);
+    return this.apiService.get<Client>(`${this.endpoint}/${userId}`);
   }
 
   getCurrentClientProfile(): Observable<Client> {

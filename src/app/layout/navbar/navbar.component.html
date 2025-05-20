@@ -5,7 +5,7 @@
         <div class="flex-shrink-0 flex items-center">
           <a routerLink="/" class="text-xl font-bold text-blue-600">LRMS</a>
         </div>
-
+        <!--
         <nav class="hidden sm:ml-6 sm:flex sm:space-x-4" *ngIf="currentUser">
           <a routerLink="/" routerLinkActive="text-blue-600 border-blue-500"
             [routerLinkActiveOptions]="{exact: true}"
@@ -37,70 +37,100 @@
             class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             Staff
           </a>
-        </nav>
+        </nav> -->
       </div>
 
       <div class="hidden sm:ml-6 sm:flex sm:items-center">
         <div class="relative" *ngIf="currentUser">
-          <button (click)="toggleUserMenu()" type="button"
-            class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            <div *ngIf="!currentUser.profileImageUrl"
-              class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-              {{ currentUser.firstName.charAt(0) }}{{
-              currentUser.lastName.charAt(0) }}
+          <button
+            (click)="toggleUserMenu()"
+            type="button"
+            class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <div
+              *ngIf="!currentUser.profileImageUrl"
+              class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white"
+            >
+              {{ currentUser.firstName.charAt(0)
+              }}{{ currentUser.lastName.charAt(0) }}
             </div>
-            <img *ngIf="currentUser.profileImageUrl"
-              class="h-8 w-8 rounded-full" [src]="currentUser.profileImageUrl"
-              alt>
-            <span class="ml-2 text-gray-700">{{ currentUser.firstName }} {{
-              currentUser.lastName }}</span>
-            <svg class="ml-1 h-5 w-5 text-gray-400"
-              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-              fill="currentColor">
-              <path fill-rule="evenodd"
+            <img
+              *ngIf="currentUser.profileImageUrl"
+              class="h-8 w-8 rounded-full"
+              [src]="currentUser.profileImageUrl"
+              alt
+            />
+            <span class="ml-2 text-gray-700"
+              >{{ currentUser.firstName }} {{ currentUser.lastName }}</span
+            >
+            <svg
+              class="ml-1 h-5 w-5 text-gray-400"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
+                clip-rule="evenodd"
+              />
             </svg>
           </button>
 
-          <div *ngIf="showUserMenu"
+          <div
+            *ngIf="showUserMenu"
             (appClickOutside)="closeUserMenu()"
             class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-            role="menu">
+            role="menu"
+          >
             <div class="px-4 py-2 border-b">
               <p class="text-sm font-medium">{{ currentUser.fullName }}</p>
               <p class="text-xs text-gray-500">{{ currentUser.email }}</p>
               <span
-                class="mt-1 inline-block px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">{{
-                currentUser.userType | titlecase }}</span>
+                class="mt-1 inline-block px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800"
+                >{{ currentUser.userType | titlecase }}</span
+              >
             </div>
 
-            <a routerLink="/settings/profile"
+            <a
+              routerLink="/settings/profile"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">
+              role="menuitem"
+            >
               My Profile
             </a>
-            <a *ngIf="isAdmin" routerLink="/settings"
+            <!-- <a
+              *ngIf="isAdmin"
+              routerLink="/settings"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">
+              role="menuitem"
+            >
               Settings
-            </a>
-            <a *ngIf="isClient" routerLink="/clients/profile"
+            </a> -->
+            <a
+              *ngIf="isClient"
+              routerLink="/clients/profile"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">
+              role="menuitem"
+            >
               Client Dashboard
             </a>
-            <a *ngIf="isStaff" routerLink="/staff/profile"
+            <a
+              *ngIf="isStaff"
+              routerLink="/staff/profile"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">
+              role="menuitem"
+            >
               Staff Dashboard
             </a>
 
             <div class="border-t border-gray-100"></div>
 
-            <button (click)="logout()"
+            <button
+              (click)="logout()"
               class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">
+              role="menuitem"
+            >
               Logout
             </button>
           </div>
@@ -110,8 +140,10 @@
           <a routerLink="/auth/login" class="text-blue-600 hover:text-blue-800">
             Login
           </a>
-          <a routerLink="/auth/register"
-            class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
+          <a
+            routerLink="/auth/register"
+            class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"
+          >
             Register
           </a>
         </div>
@@ -119,13 +151,25 @@
 
       <!-- Mobile menu button -->
       <div class="flex items-center sm:hidden">
-        <button (click)="toggleMobileMenu()" type="button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+        <button
+          (click)="toggleMobileMenu()"
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+        >
           <span class="sr-only">Open main menu</span>
-          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
@@ -133,38 +177,54 @@
   </div>
 
   <!-- Mobile menu -->
-  <div class="sm:hidden"
-    [ngClass]="{'block': showMobileMenu, 'hidden': !showMobileMenu}">
+  <div
+    class="sm:hidden"
+    [ngClass]="{ block: showMobileMenu, hidden: !showMobileMenu }"
+  >
     <div class="pt-2 pb-3 space-y-1" *ngIf="currentUser">
-      <a routerLink="/"
+      <a
+        routerLink="/"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        [routerLinkActiveOptions]="{exact: true}"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Dashboard
       </a>
-      <a routerLink="/properties"
+      <a
+        routerLink="/properties"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Properties
       </a>
-      <a routerLink="/vehicles"
+      <a
+        routerLink="/vehicles"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Vehicles
       </a>
-      <a routerLink="/reservations"
+      <a
+        routerLink="/reservations"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Reservations
       </a>
-      <a *ngIf="isAdmin || isStaff" routerLink="/clients"
+      <a
+        *ngIf="isAdmin || isStaff"
+        routerLink="/clients"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Clients
       </a>
-      <a *ngIf="isAdmin || isStaff" routerLink="/staff"
+      <a
+        *ngIf="isAdmin || isStaff"
+        routerLink="/staff"
         routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
-        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+        class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+      >
         Staff
       </a>
     </div>
@@ -172,41 +232,61 @@
     <div class="pt-4 pb-3 border-t border-gray-200" *ngIf="currentUser">
       <div class="flex items-center px-4">
         <div class="flex-shrink-0">
-          <div *ngIf="!currentUser.profileImageUrl"
-            class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white">
-            {{ currentUser.firstName.charAt(0) }}{{
-            currentUser.lastName.charAt(0) }}
+          <div
+            *ngIf="!currentUser.profileImageUrl"
+            class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white"
+          >
+            {{ currentUser.firstName.charAt(0)
+            }}{{ currentUser.lastName.charAt(0) }}
           </div>
-          <img *ngIf="currentUser.profileImageUrl"
-            class="h-10 w-10 rounded-full" [src]="currentUser.profileImageUrl"
-            alt>
+          <img
+            *ngIf="currentUser.profileImageUrl"
+            class="h-10 w-10 rounded-full"
+            [src]="currentUser.profileImageUrl"
+            alt
+          />
         </div>
         <div class="ml-3">
-          <div class="text-base font-medium text-gray-800">{{
-            currentUser.firstName }} {{ currentUser.lastName }}</div>
-          <div class="text-sm font-medium text-gray-500">{{ currentUser.email
-            }}</div>
+          <div class="text-base font-medium text-gray-800">
+            {{ currentUser.firstName }} {{ currentUser.lastName }}
+          </div>
+          <div class="text-sm font-medium text-gray-500">
+            {{ currentUser.email }}
+          </div>
         </div>
       </div>
       <div class="mt-3 space-y-1">
-        <a routerLink="/settings/profile"
-          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+        <a
+          routerLink="/settings/profile"
+          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+        >
           My Profile
         </a>
-        <a *ngIf="isAdmin" routerLink="/settings"
-          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+        <!-- <a
+          *ngIf="isAdmin"
+          routerLink="/settings"
+          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+        >
           Settings
-        </a>
-        <a *ngIf="isClient" routerLink="/clients/profile"
-          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+        </a> -->
+        <a
+          *ngIf="isClient"
+          routerLink="/clients/profile"
+          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+        >
           Client Dashboard
         </a>
-        <a *ngIf="isStaff" routerLink="/staff/profile"
-          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+        <a
+          *ngIf="isStaff"
+          routerLink="/staff/profile"
+          class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+        >
           Staff Dashboard
         </a>
-        <button (click)="logout()"
-          class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+        <button
+          (click)="logout()"
+          class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+        >
           Logout
         </button>
       </div>
@@ -217,8 +297,10 @@
         <a routerLink="/auth/login" class="text-blue-600 hover:text-blue-800">
           Login
         </a>
-        <a routerLink="/auth/register"
-          class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
+        <a
+          routerLink="/auth/register"
+          class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"
+        >
           Register
         </a>
       </div>

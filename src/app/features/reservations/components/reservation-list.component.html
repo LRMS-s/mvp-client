@@ -1,24 +1,28 @@
-<div class="reservations-container">
-  <div class="page-header">
-    <h1>Reservations</h1>
-    <a routerLink="/reservations/new" class="btn-primary">Create New Reservation</a>
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Reservations</h1>
+    <a routerLink="/reservations/new" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors">Create New Reservation</a>
   </div>
 
-  <div class="filters-section">
-    <form [formGroup]="filterForm" class="filter-form">
-      <div class="search-field">
+  <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <form [formGroup]="filterForm" class="space-y-4">
+      <div class="w-full">
         <input
           type="text"
           formControlName="searchTerm"
           placeholder="Search reservations..."
-          class="form-control"
+          class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
       </div>
 
-      <div class="filter-fields">
-        <div class="filter-field">
-          <label for="status">Status</label>
-          <select id="status" formControlName="status" class="form-control">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="space-y-1">
+          <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+          <select
+            id="status"
+            formControlName="status"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
             <option value="">All Statuses</option>
             <option *ngFor="let status of reservationStatuses" [value]="status">
               {{ status | titlecase }}
@@ -26,9 +30,13 @@
           </select>
         </div>
 
-        <div class="filter-field">
-          <label for="paymentStatus">Payment Status</label>
-          <select id="paymentStatus" formControlName="paymentStatus" class="form-control">
+        <div class="space-y-1">
+          <label for="paymentStatus" class="block text-sm font-medium text-gray-700">Payment Status</label>
+          <select
+            id="paymentStatus"
+            formControlName="paymentStatus"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
             <option value="">All Payment Statuses</option>
             <option *ngFor="let status of paymentStatuses" [value]="status">
               {{ status | titlecase }}
@@ -36,166 +44,194 @@
           </select>
         </div>
 
-        <div class="filter-field">
-          <label for="startDateFrom">Start Date From</label>
+        <div class="space-y-1">
+          <label for="startDateFrom" class="block text-sm font-medium text-gray-700">Start Date From</label>
           <input
             type="date"
             id="startDateFrom"
             formControlName="startDateFrom"
-            class="form-control"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
         </div>
 
-        <div class="filter-field">
-          <label for="startDateTo">Start Date To</label>
+        <div class="space-y-1">
+          <label for="startDateTo" class="block text-sm font-medium text-gray-700">Start Date To</label>
           <input
             type="date"
             id="startDateTo"
             formControlName="startDateTo"
-            class="form-control"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
         </div>
 
-        <div class="filter-field">
-          <label for="minAmount">Min Amount</label>
+        <div class="space-y-1">
+          <label for="minAmount" class="block text-sm font-medium text-gray-700">Min Amount</label>
           <input
             type="number"
             id="minAmount"
             formControlName="minAmount"
-            class="form-control"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             min="0"
           >
         </div>
 
-        <div class="filter-field">
-          <label for="maxAmount">Max Amount</label>
+        <div class="space-y-1">
+          <label for="maxAmount" class="block text-sm font-medium text-gray-700">Max Amount</label>
           <input
             type="number"
             id="maxAmount"
             formControlName="maxAmount"
-            class="form-control"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             min="0"
           >
         </div>
+      </div>
 
-        <button type="button" class="btn-secondary" (click)="resetFilters()">
+      <div class="flex justify-end">
+        <button
+          type="button"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
+          (click)="resetFilters()"
+        >
           Reset Filters
         </button>
       </div>
     </form>
   </div>
 
-  <div *ngIf="loading" class="loading-state">
-    <p>Loading reservations...</p>
+  <div *ngIf="loading" class="flex justify-center py-8">
+    <p class="text-gray-600">Loading reservations...</p>
   </div>
 
-  <div *ngIf="!loading && filteredReservations.length === 0" class="empty-state">
-    <p>No reservations found matching your criteria.</p>
+  <div *ngIf="!loading && filteredReservations.length === 0" class="flex justify-center py-8">
+    <p class="text-gray-600">No reservations found matching your criteria.</p>
   </div>
 
-  <div *ngIf="!loading && filteredReservations.length > 0" class="reservation-list">
-    <table>
+  <div *ngIf="!loading && filteredReservations.length > 0" class="overflow-x-auto">
+    <table class="min-w-full bg-white rounded-lg shadow-md">
       <thead>
-        <tr>
-          <th>Reservation #</th>
-          <th>Client</th>
-          <th>Item</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Status</th>
-          <th>Payment Status</th>
-          <th>Total Amount</th>
-          <th>Actions</th>
+        <tr class="bg-gray-100 text-gray-700 text-left">
+          <th class="py-3 px-4 font-semibold">Reservation #</th>
+          <th class="py-3 px-4 font-semibold">Client</th>
+          <th class="py-3 px-4 font-semibold">Item</th>
+          <th class="py-3 px-4 font-semibold">Start Date</th>
+          <th class="py-3 px-4 font-semibold">End Date</th>
+          <th class="py-3 px-4 font-semibold">Status</th>
+          <th class="py-3 px-4 font-semibold">Payment Status</th>
+          <th class="py-3 px-4 font-semibold">Total Amount</th>
+          <th class="py-3 px-4 font-semibold">Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let reservation of paginatedReservations">
-          <td>{{ reservation.reservationNumber }}</td>
-          <td>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let reservation of paginatedReservations" class="hover:bg-gray-50">
+          <td class="py-3 px-4">{{ reservation.reservationNumber }}</td>
+          <td class="py-3 px-4">
             {{ reservation.client.firstName }} {{ reservation.client.lastName }}
           </td>
-          <td>
+          <td class="py-3 px-4">
             {{ reservation.itemType === 'property'
               ? reservation.property?.name
               : reservation.vehicle?.name }}
           </td>
-          <td>{{ reservation.startDate | date:'shortDate' }}</td>
-          <td>{{ reservation.endDate | date:'shortDate' }}</td>
-          <td>
+          <td class="py-3 px-4">{{ reservation.startDate | date:'shortDate' }}</td>
+          <td class="py-3 px-4">{{ reservation.endDate | date:'shortDate' }}</td>
+          <td class="py-3 px-4">
             <span
-              class="status-badge"
-              [ngClass]="'status-' + reservation.status"
+              class="px-2 py-1 text-xs font-medium rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800': reservation.status === 'confirmed',
+                'bg-yellow-100 text-yellow-800': reservation.status === 'pending',
+                'bg-red-100 text-red-800': reservation.status === 'cancelled',
+              }"
             >
               {{ reservation.status | titlecase }}
             </span>
           </td>
-          <td>
+          <td class="py-3 px-4">
             <span
-              class="payment-badge"
-              [ngClass]="'payment-' + reservation.paymentStatus"
+              class="px-2 py-1 text-xs font-medium rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800': reservation.paymentStatus === 'paid',
+                'bg-yellow-100 text-yellow-800': reservation.paymentStatus === 'pending',
+                'bg-red-100 text-red-800': reservation.paymentStatus === 'failed',
+                'bg-blue-100 text-blue-800': reservation.paymentStatus === 'refunded'
+              }"
             >
               {{ reservation.paymentStatus | titlecase }}
             </span>
           </td>
-          <td>{{ reservation.totalAmount | currency }}</td>
-          <td class="actions">
+          <td class="py-3 px-4">{{ reservation.totalAmount | currency }}</td>
+          <td class="py-3 px-4 space-x-2">
             <a
               [routerLink]="['/reservations', reservation.id]"
-              class="btn-view"
+              class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-1 px-3 rounded transition-colors"
             >
               View
             </a>
             <a
               *ngIf="isAdmin || isStaff"
               [routerLink]="['/reservations', reservation.id, 'edit']"
-              class="btn-edit"
+              class="inline-block bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium py-1 px-3 rounded transition-colors"
             >
               Edit
             </a>
+            <button
+            class="inline-block bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-1 px-3 rounded transition-colors"
+            (click)="deleteReservation(reservation.id)"
+            [disabled]="loading"
+
+            >Delete </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <!-- Pagination -->
-    <div class="pagination" *ngIf="totalPages > 1">
-      <div class="pagination-info">
+    <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4" *ngIf="totalPages > 1">
+      <div class="text-sm text-gray-600">
         Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
         {{ Math.min(currentPage * itemsPerPage, filteredReservations.length) }}
         of {{ filteredReservations.length }} reservations
       </div>
 
-      <div class="pagination-controls">
+      <div class="flex space-x-1">
         <button
           (click)="changePage(1)"
           [disabled]="currentPage === 1"
+          class="px-3 py-1 rounded-md border border-gray-300 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           First
         </button>
         <button
           (click)="changePage(currentPage - 1)"
           [disabled]="currentPage === 1"
+          class="px-3 py-1 rounded-md border border-gray-300 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
 
-        <button
-          *ngFor="let page of [].constructor(totalPages); let i = index"
-          (click)="changePage(i + 1)"
-          [class.active]="currentPage === i + 1"
-        >
-          {{ i + 1 }}
-        </button>
+        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            *ngIf="i + 1 >= currentPage - 2 && i + 1 <= currentPage + 2"
+            (click)="changePage(i + 1)"
+            [ngClass]="currentPage === i + 1 ? 'bg-blue-600 text-white border-blue-600' : ''"
+            class="px-3 py-1 rounded-md border border-gray-300 text-sm font-medium"
+          >
+            {{ i + 1 }}
+          </button>
+        </ng-container>
 
         <button
           (click)="changePage(currentPage + 1)"
           [disabled]="currentPage === totalPages"
+          class="px-3 py-1 rounded-md border border-gray-300 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
         <button
           (click)="changePage(totalPages)"
           [disabled]="currentPage === totalPages"
+          class="px-3 py-1 rounded-md border border-gray-300 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Last
         </button>

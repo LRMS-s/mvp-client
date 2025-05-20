@@ -273,7 +273,11 @@ export class VehicleFormComponent implements OnInit {
   }
 
   prepareFormData(): any {
-    const formValue = this.vehicleForm.value;
+    const formValue = {
+      ...this.vehicleForm.value,
+      baseRate: +this.vehicleForm.value.baseRate,
+      securityDeposit: +this.vehicleForm.value.securityDeposit,
+    };
 
     // Convert imageUrls from string to array if needed
     if (typeof formValue.imageUrls === 'string') {

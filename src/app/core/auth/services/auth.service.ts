@@ -2,27 +2,41 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthRequest, AuthResponse, RegisterRequest } from '../models/auth.model';
+import {
+  AuthRequest,
+  AuthResponse,
+  RegisterRequest,
+} from '../models/auth.model';
 import { User } from '../../models/user.model';
 import { environment } from '../../../../environments/environment';
+import { ApiService } from '../../services/api.service';
+import { Client } from '../../models/client.model';
+import { Staff } from '../../models/staff.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly API_URL = `${environment.apiUrl}/auth`;
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'current_user';
 
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
+  private currentUserSubject = new BehaviorSubject<User | null>(
+    this.getUserFromStorage()
+  );
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   login(authRequest: AuthRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/login`, authRequest)
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/login`, authRequest)
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.setSession(response);
           this.currentUserSubject.next(response.user);
         })
@@ -41,15 +55,26 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.API_URL}/password/forgot`, { email });
+    return this.http.post<{ message: string }>(
+      `${this.API_URL}/password/forgot`,
+      { email }
+    );
   }
 
-  resetPassword(token: string, newPassword: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.API_URL}/password/reset`, { token, newPassword });
+  resetPassword(
+    token: string,
+    newPassword: string
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.API_URL}/password/reset`,
+      { token, newPassword }
+    );
   }
 
   validateToken(): Observable<User> {
-    return this.http.post<User>(`${this.API_URL}/validate-token`, { token: this.getToken() });
+    return this.http.post<User>(`${this.API_URL}/validate-token`, {
+      token: this.getToken(),
+    });
   }
 
   getToken(): string | null {
@@ -79,5 +104,8 @@ export class AuthService {
       }
     }
     return null;
+  }
+  getUserProfile(): Observable<User | Client | Staff> {
+    return this.http.get<User | Client | Staff>(`${this.API_URL}/profile`);
   }
 }

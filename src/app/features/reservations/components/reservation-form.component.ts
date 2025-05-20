@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -20,16 +20,22 @@ import {
   RentalItem,
   RentalItemType,
 } from '../../../core/models/rental-item.model';
+import { RentalItemCardComponent } from '../../../shared/components/rental-item-card/rental-item-card.component';
 
 @Component({
   selector: 'app-reservation-form',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    RentalItemCardComponent,
+  ],
   templateUrl: './reservation-form.component.html',
   styleUrl: './reservation-form.component.scss',
 })
 export class ReservationFormComponent implements OnInit {
-  reservationForm: FormGroup;
+  reservationForm: FormGroup = new FormGroup({});
   properties: Property[] = [];
   vehicles: Vehicle[] = [];
   clients: Client[] = [];
@@ -47,7 +53,8 @@ export class ReservationFormComponent implements OnInit {
     private propertyService: PropertyService,
     private vehicleService: VehicleService,
     private clientService: ClientService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private route: ActivatedRoute
   ) {
     this.reservationForm = this.fb.group({
       itemType: [RentalItemType.PROPERTY, Validators.required],
@@ -63,6 +70,26 @@ export class ReservationFormComponent implements OnInit {
   Object = Object;
   ngOnInit(): void {
     this.isLoading = true;
+    if (
+      this.route.snapshot.queryParams['rentalItemId'] &&
+      this.route.snapshot.queryParams['itemType']
+    ) {
+      this.selectedItemType = this.route.snapshot.queryParams['itemType'];
+
+      this.reservationForm.patchValue({
+        itemType: this.route.snapshot.queryParams['itemType'],
+      });
+      if (this.route.snapshot.queryParams['itemType'] === 'property') {
+        this.reservationForm.patchValue({
+          propertyId: +this.route.snapshot.queryParams['rentalItemId'],
+        });
+      } else {
+        this.reservationForm.patchValue({
+          vehicleId: +this.route.snapshot.queryParams['rentalItemId'],
+        });
+      }
+    }
+    // Set initial item type based on query params
 
     // Load clients
     this.clientService.getClients().subscribe({
@@ -205,14 +232,34 @@ export class ReservationFormComponent implements OnInit {
       this.selectedItemType === 'property'
         ? formValue.propertyId
         : formValue.vehicleId;
-
+    this.reservationService.reservationDates = {
+      startDate: formValue.startDate,
+      endDate: formValue.endDate,
+    };
     if (!itemId) {
-      this.notificationService.error('Please select a property or vehicle.');
+      this.reservationService
+        .findAvailableItems(
+          formValue.startDate,
+          formValue.endDate,
+          this.selectedItemType
+        )
+        .subscribe({
+          next: (available) => {
+            this.isLoading = false;
+            this.availableRentalItems = available;
+            console.log(this.availableRentalItems);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            console.error('Error checking availability', err);
+            this.notificationService.error('Failed to check availability');
+          },
+        });
       return;
     }
 
     this.reservationService
-      .getAvailableItems(
+      .checkAvailability(
         formValue.startDate,
         formValue.endDate,
         this.selectedItemType,
@@ -222,7 +269,6 @@ export class ReservationFormComponent implements OnInit {
         next: (available) => {
           this.isLoading = false;
           if (available) {
-            this.availableRentalItems = available;
             // this.notificationService.success(
             //   'The selected item is available for these dates!'
             // );
@@ -271,9 +317,9 @@ export class ReservationFormComponent implements OnInit {
     const reservationData = {
       itemType: formValue.itemType,
       ...(formValue.itemType === 'property'
-        ? { propertyId: formValue.propertyId }
-        : { vehicleId: formValue.vehicleId }),
-      clientId: formValue.clientId,
+        ? { propertyId: +formValue.propertyId }
+        : { vehicleId: +formValue.vehicleId }),
+      clientId: +formValue.clientId,
       startDate: formValue.startDate,
       endDate: formValue.endDate,
       additionalServices,

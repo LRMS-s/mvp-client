@@ -122,35 +122,13 @@ export class ProfileComponent implements OnInit {
   loadAdditionalProfile(): void {
     if (!this.currentUser) return;
 
-    if (this.isClient) {
-      this.clientService.getClientByUserId(this.currentUser.id).subscribe({
-        next: (client) => {
-          this.clientProfile = client;
-          this.patchClientProfile(client);
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error loading client profile', err);
-          this.generalError = 'Failed to load client profile details';
-          this.isLoading = false;
-        },
-      });
-    } else if (this.isStaff || this.isAdmin) {
-      this.staffService.getStaffMemberByUserId(this.currentUser.id).subscribe({
-        next: (staff) => {
-          this.staffProfile = staff;
-          this.patchStaffProfile(staff);
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error loading staff profile', err);
-          this.generalError = 'Failed to load staff profile details';
-          this.isLoading = false;
-        },
-      });
-    } else {
-      this.isLoading = false;
-    }
+    this.authService.getUserProfile().subscribe({
+      next: (value) => {
+        if (this.isClient) this.clientProfile = value as Client;
+        else this.staffProfile = value as Staff;
+        this.isLoading = false;
+      },
+    });
   }
 
   patchClientProfile(client: Client): void {
